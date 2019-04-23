@@ -8,7 +8,15 @@
 #pragma once
 
 #include <iostream>
-#include <sys/ipc.h> 
-#include <sys/shm.h> 
-#include <stdio.h> 
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <stdio.h>
 #include <cstdio>
+
+enum PizzaType
+{
+    Regina = 1,
+    Margarita = 2,
+    Americana = 4,
+    Fantasia = 8
+};

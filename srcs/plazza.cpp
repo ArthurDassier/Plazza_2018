@@ -30,7 +30,7 @@ int main(int argc, char **argv)
         // destroy the shared memory 
         shmctl(shmid,IPC_RMID,NULL); 
     } else {
-        std::cout << "Write Data : "; 
+        std::cout << "Write Data : ";
         str = (char*) shmat(shmid,(void*)0,0); 
         // gets(str);
         // std::getline(std::cin, buf);

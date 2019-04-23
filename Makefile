@@ -7,7 +7,10 @@
 
 NAME		=	plazza
 
-SRC			= 	srcs/plazza.cpp				\
+SRC			= 	srcs/main.cpp				\
+				srcs/Cook.cpp				\
+				srcs/Kitchen.cpp			\
+				srcs/Reception.cpp			\
 
 OBJ			=	$(SRC:.cpp=.o)
 
