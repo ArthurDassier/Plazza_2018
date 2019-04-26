@@ -38,6 +38,7 @@ int Reception::parseCommand()
             wait(&status);
     }
     std::cout << "jai fini le parse" << std::endl;*/
+
     std::getline(std::cin, str);
     if (str.compare("Regina") == 0) {
         setLastCommand("Regina");

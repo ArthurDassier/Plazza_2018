@@ -18,5 +18,8 @@ int main(int argc, char **argv)
         if (reception.parseCommand() == 0)
             std::cout << "Wow il commande une pizza " << 
             reception.getLastCommand() << std::endl;
+        else
+            std::cout << "heuu c'est pas le nom d'une pizza" <<
+            std::endl;
     }
 }

@@ -19,6 +19,7 @@ class Reception
         int parseCommand();
         void setLastCommand(std::string new_command);
         std::string getLastCommand();
+        void manage_kitchen();
 
     private:
         int _time;
