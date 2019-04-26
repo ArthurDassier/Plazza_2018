@@ -13,12 +13,14 @@
 int main(int argc, char **argv)
 {
     Reception reception(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
+//    auto &tmp_k : _tmp_list_kitchen;
 
     while (1) {
-        if (reception.parseCommand() == 0)
+        if (reception.parseCommand() == 0) {
             std::cout << "Wow il commande une pizza " << 
             reception.getLastCommand() << std::endl;
-        else
+            reception.goToKitchens(reception.getLastCommand());
+        } else
             std::cout << "heuu c'est pas le nom d'une pizza" <<
             std::endl;
     }

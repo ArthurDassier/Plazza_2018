@@ -9,16 +9,24 @@
 
 #include <vector>
 #include <unistd.h>
+#include <fstream>
 #include "Cook.hpp"
 
 class Kitchen
 {
     public:
-        Kitchen(int nb_cooks);
+        Kitchen(int name, int nb_cooks);
         ~Kitchen();
 
+
+        int getName();
+        void setName(int name);
+        void workOnPizza(key_t, char *pathname);
+
+
     private:
-        pid_t pid;
+        int _name;
+        char *_pathname;
         std::vector<PizzaType> _PizzasToPrepare;
         std::vector<Cook> _cookTab;
         int _doe;

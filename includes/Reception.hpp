@@ -9,6 +9,7 @@
 
 #include <string>
 #include "Plazza.hpp"
+#include "Kitchen.hpp"
 
 class Reception 
 {
@@ -19,11 +20,14 @@ class Reception
         int parseCommand();
         void setLastCommand(std::string new_command);
         std::string getLastCommand();
-        void manage_kitchen();
+        std::list<int> getKitchen();
+        void goToKitchens(std::string);
 
     private:
         int _time;
         int _nb_cook;
         int _reset_food;
         std::string _command;
+        std::list<int> _list_kitchen;
+        std::list<std::string> _list_key;
 };

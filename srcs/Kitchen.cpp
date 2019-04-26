@@ -7,7 +7,8 @@
 
 #include "Kitchen.hpp"
 
-Kitchen::Kitchen(int nb_cooks):
+Kitchen::Kitchen(int name, int nb_cooks):
+    _name(name),
     _doe(5),
     _ham(5),
     _steak(5),
@@ -25,4 +26,35 @@ Kitchen::Kitchen(int nb_cooks):
 
 Kitchen::~Kitchen()
 {
+}
+
+int Kitchen::getName(void)
+{
+    return (_name);
+}
+
+void Kitchen::setName(int name)
+{
+    _name = name;
+}
+
+void Kitchen::workOnPizza(key_t key, char *pathname)
+{
+    int shmid = shmget(key,1024,0666|IPC_CREAT);
+    char *str;
+    std::fstream file(pathname, std::fstream::out);
+
+    _pathname = pathname;
+    sleep(3);
+    str = (char*) shmat(shmid,(void*)0,0);
+    printf("CHUI LA KITCHEN : %s", str);
+    file << str;
+    file.close();
+    shmdt(str);
+    sleep(3);
+    str = (char*) shmat(shmid,(void*)0,0);
+    printf("CHUI LA KITCHEN : %s", str);
+    shmdt(str);
+    shmctl(shmid,IPC_RMID,NULL);
+
 }

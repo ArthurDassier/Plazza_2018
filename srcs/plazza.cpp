@@ -15,7 +15,7 @@ int main(int argc, char **argv)
     pid_t child;
     int status;
     // ftok to generate unique key 
-    key_t key = ftok("shmfile",65); 
+    key_t key = ftok("shmfile",65);
     // shmget returns an identifier in shmid 
     int shmid = shmget(key,1024,0666|IPC_CREAT); 
     // shmat to attach to shared memory 

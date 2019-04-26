@@ -12,6 +12,7 @@
 #include <sys/shm.h>
 #include <stdio.h>
 #include <cstdio>
+#include <list>
 
 enum PizzaType
 {
