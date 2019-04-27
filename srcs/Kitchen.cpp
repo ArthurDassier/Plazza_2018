@@ -49,7 +49,8 @@ void Kitchen::workOnPizza(char *pathname, int shmid)
         sleep(1);
         str = (char*) shmat(shmid,(void*)0,0);
         if (strcmp(str, "fini") != 0) {
-            printf("CHUI LA KITCHEN : %s", str);
+            printf("CHUI LA KITCHEN%c : %s", pathname[strlen(pathname) - 1],
+            str);
             file << str;
             sprintf(str, "%s", "fini");
         } else

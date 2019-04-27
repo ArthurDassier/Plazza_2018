@@ -75,10 +75,14 @@ void Reception::goToKitchens(std::string command)
             return;
         }
         str = (char*)shmat(it->shmid,(void*)0,0);
+        if (strcmp(str, "fini") == 0) {
+            printf("ya plus de pizza\n");
+            command.clear();
+        }
         sprintf(str, "%s", command.c_str());
         shmdt(str);
     }
-
+    //addKitchen();
     // sleep(4);
     // key_t nkey = ftok("log/tes", 65);
     // int nshmid = shmget(nkey,1024,0666|IPC_CREAT);
@@ -107,12 +111,12 @@ void Reception::createKitchen(std::string &command)
         shmdt(str);
     }
     sleep(2);
-    int shmid = shmget(it->key,1024,0666|IPC_CREAT);
-    str = (char*) shmat(shmid,(void*)0,0);
-    if (strcmp(str, "fini") == 0) {
-        printf("ya plus de pizza\n");
-        command.clear();
-    }
+    // int shmid = shmget(it->key,1024,0666|IPC_CREAT);
+    // str = (char*) shmat(shmid,(void*)0,0);
+    // if (strcmp(str, "fini") == 0) {
+    //     printf("ya plus de pizza\n");
+    //     command.clear();
+    // }
 }
 
 int Reception::addKitchen()
