@@ -10,7 +10,7 @@
 #include <criterion/redirect.h>
 #include "Kitchen.hpp"
 
-Test(tests_kitchen, tests_kitchen)
+Test(tests_kitchen, test_takePizzas_1)
 {
     Kitchen test(1, 1);
 
@@ -20,7 +20,7 @@ Test(tests_kitchen, tests_kitchen)
     cr_assert_eq(test.takePizzas("1\n1\n"), "1\n1\n");
 }
 
-Test(tests_kitchen, tests_kitchen)
+Test(tests_kitchen, test_takePizzas_2)
 {
     Kitchen test(1, 1);
 
@@ -30,7 +30,7 @@ Test(tests_kitchen, tests_kitchen)
     cr_assert_eq(test.takePizzas("2\n2\n"), "2\n2\n");
 }
 
-Test(tests_kitchen, tests_kitchen)
+Test(tests_kitchen, test_takePizzas_3)
 {
     Kitchen test(1, 1);
 
@@ -40,7 +40,7 @@ Test(tests_kitchen, tests_kitchen)
     cr_assert_eq(test.takePizzas("3\n3\n"), "3\n3\n");
 }
 
-Test(tests_kitchen, tests_kitchen)
+Test(tests_kitchen, test_takePizzas_4)
 {
     Kitchen test(1, 1);
 

@@ -1,49 +1,68 @@
 ##
-## EPITECH PROJECT, 2017
+## EPITECH PROJECT, 2019
 ## Makefile
 ## File description:
-## makefile for bistro-matic
+## makefile for plazza
 ##
 
 NAME		=	plazza
 
+CXX	=	g++ -std=c++11 -g3
+
 TEST_NAME	=	unit_test_plazza
 
-SRC			= 	srcs/main.cpp				\
-				srcs/Cook.cpp				\
-				srcs/Kitchen.cpp			\
-				srcs/Reception.cpp			\
+SRC_DIR	=	./srcs
 
-OBJ			=	$(SRC:.cpp=.o)
+UT_DIR	=	./tests
 
-SRC_TEST	= tests/tests_Kitchen.cpp		\
+EXE		= 	$(SRC_DIR)/main.cpp				\
+			$(SRC_DIR)/Cook.cpp				\
+			$(SRC_DIR)/Kitchen.cpp			\
+			$(SRC_DIR)/Reception.cpp		\
 
-OBJ_TEST	= $(SRC_TEST:.cpp=.o)
+OBJS	=	$(EXE:.cpp=.o)
 
-MY.H_DIR	=	./includes
+UT 		= 	$(UT_DIR)/tests_Kitchen.cpp		\
 
-CC			=	g++
+UT2	=	$(SRC_DIR)/Cook.cpp				\
+		$(SRC_DIR)/Kitchen.cpp			\
+		$(SRC_DIR)/Reception.cpp		\
 
-CFLAGS		=	-Wextra -Wall -g3
+OBJS_UT	=	$(UT:.cpp=.o)
 
-CPPFLAGS	=	-I$(MY.H_DIR) -std=c++17
+OBJS_UT2	=	$(UT2:.cpp=.o)
 
-UNITS_FLAGQ	=	-coverage -lcriterion
+RM	=	rm -rf
 
-all: $(NAME)
-	$(NAME): $(OBJ)
-	$(CC) -o $(NAME) $(OBJ)
+CXXFLAGS	=	-Wall -Wextra -g3
 
-tests_run:
-	$(CC) -o $(TEST_NAME) $(UNITS_FLAGQ) $(OBJ_TEST)
-	./$(TEST_NAME)
+CXXFLAGS	+=	-I ./includes
+
+INCLUDE		=	-I ./includes
+
+LD_FLAGS	=	-lcriterion -coverage
+
+all:		$(NAME)
+
+$(NAME): $(OBJS) 
+		$(CXX) $(INCLUDE) -o $(NAME) $(OBJS)
+
+
+tests_run:	$(OBJS) 
+			g++ -std=c++11 $(INCLUDE) -o UT $(UT) $(UT2) $(LD_FLAGS)
+			./UT
 
 clean:
-	rm -f $(OBJ)
+		$(RM) $(OBJS)
 
-fclean: clean
-	rm -f $(NAME)
+ut_clean:
+		$(RM) $(OBJS_UT) $(OBJS_UT2)
+		find \( -name "*.gc*" -o -name "#*#" \) -delete
+		$(RM) UT
 
-re: fclean all
+fclean:		clean
+		$(RM) $(NAME)
 
-.PHONY: fclean all re clean
+re:		fclean all
+
+.PHONY:		re all fclean clean tests_run ut_clean

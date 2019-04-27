@@ -56,38 +56,30 @@ std::string Kitchen::takePizzas(std::string command)
         }
     }
     for (int &it : pizzas_to_do) {
-        if (it == 1) {
-            if (_doe && _tomato && _gruyere && _ham && _mushrooms) {
-                _doe -= 1;
-                _tomato -= 1;
-                _gruyere -= 1;
-                _ham -= 1;
-                _mushrooms -= 1;
-            }
-        } else if (it == 2) {
-            if (_doe && _tomato && _gruyere) {
-                _doe -= 1;
-                _tomato -= 1;
-                _gruyere -= 1;
-            }
-        } else if (it == 3) {
-            if (_doe && _tomato && _gruyere && _steak) {
-                _doe -= 1;
-                _tomato -= 1;
-                _gruyere -= 1;
-                _steak -= 1;
-            }
-        } else if (it == 4) {
-            if (_doe && _tomato && _eggplant && _goat_cheese && _chief_love) {
-                _doe -= 1;
-                _tomato -= 1;
-                _eggplant -= 1;
-                _goat_cheese -= 1;
-                _chief_love -= 1;
-            }
+        if (it == 1 && _doe > 0 && _tomato > 0 && _gruyere > 0 && _ham > 0 && _mushrooms > 0) {
+            _doe -= 1;
+            _tomato -= 1;
+            _gruyere -= 1;
+            _ham -= 1;
+            _mushrooms -= 1;
+        } else if (it == 2 && _doe > 0 && _tomato > 0 && _gruyere > 0) {
+            _doe -= 1;
+            _tomato -= 1;
+            _gruyere -= 1;
+        } else if (it == 3 && _doe > 0 && _tomato > 0 && _gruyere > 0 && _steak > 0) {
+            _doe -= 1;
+            _tomato -= 1;
+            _gruyere -= 1;
+            _steak -= 1;
+        } else if (it == 4 && _doe > 0 && _tomato > 0 && _eggplant > 0 && _goat_cheese > 0 && _chief_love > 0) {
+            _doe -= 1;
+            _tomato -= 1;
+            _eggplant -= 1;
+            _goat_cheese -= 1;
+            _chief_love -= 1;
         } else {
             pizzas_left.push_back(std::to_string(it));
-            pizza.end() += '\n';
+            pizzas_left.back() += '\n';
         }
     }
     for (std::string &it : pizzas_left)
