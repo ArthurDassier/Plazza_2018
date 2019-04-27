@@ -7,7 +7,7 @@
 
 NAME		=	plazza
 
-CXX	=	g++ -std=c++11 -g3
+CXX	=	g++ -std=c++11 -g3 -lpthread
 
 TEST_NAME	=	unit_test_plazza
 
@@ -60,7 +60,7 @@ ut_clean:
 		find \( -name "*.gc*" -o -name "#*#" \) -delete
 		$(RM) UT
 
-fclean:		clean
+fclean:		clean ut_clean
 		$(RM) $(NAME)
 
 re:		fclean all

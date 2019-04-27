@@ -12,26 +12,29 @@
 #include <fstream>
 #include <cstring>
 #include <iostream>
+#include <pthread.h>
 #include "Cook.hpp"
 
 class Kitchen
 {
     public:
-        Kitchen(int name, int nb_cooks);
+        Kitchen(int name, int nb_cooks, int timeRestock, double timePrepare);
         ~Kitchen();
 
 
         int getName();
         void setName(int name);
         void workOnPizza(std::string pathname, int shmid);
-
         std::string takePizzas(std::string);
+        int sendToCook(PizzaType);
 
     private:
         int _name;
         std::string _pathname;
         std::vector<PizzaType> _PizzasToPrepare;
-        std::vector<Cook> _cookTab;
+        std::list<Cook> _cookList;
+        std::mutex mutex;
+        std::list<pthread_t> _threadList;
         int _doe;
         int _ham;
         int _steak;
@@ -41,5 +44,6 @@ class Kitchen
         int _gruyere;
         int _mushrooms;
         int _chief_love;
+        int _timeRestock;
+        double _timePrepare;
 };
-

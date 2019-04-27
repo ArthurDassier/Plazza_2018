@@ -5,10 +5,6 @@
 ** reception.cpp
 */
 
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <string.h>
 #include "Reception.hpp"
 
 Reception::Reception(int time, int nb_cook, int reset_food):
@@ -103,7 +99,7 @@ void Reception::createKitchen(std::string &command)
     std::cout << _list_kitchen.size() << std::endl;
     std::cout << it->name << std::endl;
     if ((child = fork()) == 0) {
-        Kitchen new_kitchen(it->name, _nb_cook);
+        Kitchen new_kitchen(it->name, _nb_cook, _reset_food, _time);
         new_kitchen.workOnPizza(it->pathname, it->shmid);
     } else {
         int shmid = shmget(it->key,1024,0666|IPC_CREAT);
@@ -111,7 +107,7 @@ void Reception::createKitchen(std::string &command)
         sprintf(str, "%s\n", command.c_str());
         shmdt(str);
     }
-    sleep(2);
+    sleep(4);
     int shmid = shmget(it->key,1024,0666|IPC_CREAT);
     str = (char*) shmat(shmid,(void*)0,0);
     if (strcmp(str, "fini") == 0) {

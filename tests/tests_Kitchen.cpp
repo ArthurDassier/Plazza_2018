@@ -12,7 +12,7 @@
 
 Test(tests_kitchen, test_takePizzas_1)
 {
-    Kitchen test(1, 1);
+    Kitchen test(1, 1, 1, 1);
 
     cr_assert_eq(test.takePizzas("1\n1\n"), "");
     cr_assert_eq(test.takePizzas("1\n1\n"), "");
@@ -22,7 +22,7 @@ Test(tests_kitchen, test_takePizzas_1)
 
 Test(tests_kitchen, test_takePizzas_2)
 {
-    Kitchen test(1, 1);
+    Kitchen test(1, 1, 1, 1);
 
     cr_assert_eq(test.takePizzas("2\n2\n"), "");
     cr_assert_eq(test.takePizzas("2\n2\n"), "");
@@ -32,7 +32,7 @@ Test(tests_kitchen, test_takePizzas_2)
 
 Test(tests_kitchen, test_takePizzas_3)
 {
-    Kitchen test(1, 1);
+    Kitchen test(1, 1, 1, 1);
 
     cr_assert_eq(test.takePizzas("3\n3\n"), "");
     cr_assert_eq(test.takePizzas("3\n3\n"), "");
@@ -42,7 +42,7 @@ Test(tests_kitchen, test_takePizzas_3)
 
 Test(tests_kitchen, test_takePizzas_4)
 {
-    Kitchen test(1, 1);
+    Kitchen test(1, 1, 1, 1);
 
     cr_assert_eq(test.takePizzas("4\n4\n"), "");
     cr_assert_eq(test.takePizzas("4\n4\n"), "");

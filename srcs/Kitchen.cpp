@@ -8,7 +8,7 @@
 #include <string.h>
 #include "Kitchen.hpp"
 
-Kitchen::Kitchen(int name, int nb_cooks):
+Kitchen::Kitchen(int name, int nb_cooks, int timeRestock, double timePrepare):
     _name(name),
     _doe(5),
     _ham(5),
@@ -18,11 +18,15 @@ Kitchen::Kitchen(int name, int nb_cooks):
     _eggplant(5),
     _gruyere(5),
     _mushrooms(5),
-    _chief_love(5)
+    _chief_love(5),
+    _timeRestock(timeRestock),
+    _timePrepare(timePrepare)
 {
     for (int i = 0; i < nb_cooks; i++) {
-        Cook current_cook = Cook(i);
-        _cookTab.push_back(current_cook);
+        Cook current_cook = Cook(i, timePrepare);
+        pthread_t thread1;
+        _cookList.push_back(current_cook);
+        _threadList.push_back(thread1);
     }
 }
 
@@ -49,35 +53,58 @@ std::string Kitchen::takePizzas(std::string command)
 
     for (char &it : command) {
         if (it != '\n')
-            pizza += it; 
+            pizza += it;
         else {
             pizzas_to_do.push_back(atoi(pizza.c_str()));
             pizza.clear();
         }
     }
+    printf("avant le for\n");
     for (int &it : pizzas_to_do) {
         if (it == 1 && _doe > 0 && _tomato > 0 && _gruyere > 0 && _ham > 0 && _mushrooms > 0) {
-            _doe -= 1;
-            _tomato -= 1;
-            _gruyere -= 1;
-            _ham -= 1;
-            _mushrooms -= 1;
+            printf("dans le 1\n");
+            if (sendToCook((PizzaType)it) == 0) {
+                _doe -= 1;
+                _tomato -= 1;
+                _gruyere -= 1;
+                _ham -= 1;
+                _mushrooms -= 1;
+            } else {
+                pizzas_left.push_back(std::to_string(it));
+                pizzas_left.back() += '\n';
+            }
         } else if (it == 2 && _doe > 0 && _tomato > 0 && _gruyere > 0) {
-            _doe -= 1;
-            _tomato -= 1;
-            _gruyere -= 1;
+            if (sendToCook((PizzaType)it) == 0) {
+                _doe -= 1;
+                _tomato -= 1;
+                _gruyere -= 1;
+            } else {
+                pizzas_left.push_back(std::to_string(it));
+                pizzas_left.back() += '\n';
+            }
         } else if (it == 3 && _doe > 0 && _tomato > 0 && _gruyere > 0 && _steak > 0) {
-            _doe -= 1;
-            _tomato -= 1;
-            _gruyere -= 1;
-            _steak -= 1;
+            if (sendToCook((PizzaType)it) == 0) {
+                _doe -= 1;
+                _tomato -= 1;
+                _gruyere -= 1;
+                _steak -= 1;
+            } else {
+                pizzas_left.push_back(std::to_string(it));
+                pizzas_left.back() += '\n';
+            }
         } else if (it == 4 && _doe > 0 && _tomato > 0 && _eggplant > 0 && _goat_cheese > 0 && _chief_love > 0) {
-            _doe -= 1;
-            _tomato -= 1;
-            _eggplant -= 1;
-            _goat_cheese -= 1;
-            _chief_love -= 1;
+            if (sendToCook((PizzaType)it) == 0) {
+                _doe -= 1;
+                _tomato -= 1;
+                _eggplant -= 1;
+                _goat_cheese -= 1;
+                _chief_love -= 1;
+            } else {
+                pizzas_left.push_back(std::to_string(it));
+                pizzas_left.back() += '\n';
+            }
         } else {
+            printf("dans le else fin\n");
             pizzas_left.push_back(std::to_string(it));
             pizzas_left.back() += '\n';
         }
@@ -97,14 +124,30 @@ void Kitchen::workOnPizza(std::string pathname, int shmid)
         sleep(1);
         str = (char*) shmat(shmid, (void*)0, 0);
         if (strcmp(str, "fini") != 0) {
-            printf("CHUI LA KITCHEN%c : %s\n",
-            pathname[strlen((char *)pathname.c_str()) - 1], str);
-            file << str;
-            sprintf(str, "%s", "fini");
+            std::string tmp(str);
+            tmp = takePizzas("1\n");
+            if (tmp.size() == 0)
+                sprintf(str, "%s", "fini");
+            // printf("CHUI LA KITCHEN%c : %s\n",
+            // pathname[strlen((char *)pathname.c_str()) - 1], str);
+            // file << str;
         } else
             std::cout << "j'attend" << std::endl;
         shmdt(str);
     }
     file.close();
     shmctl(shmid,IPC_RMID,NULL);
+}
+
+int Kitchen::sendToCook(PizzaType pizza)
+{
+    std::list<Cook>::iterator it = _cookList.begin();
+
+    printf("dans sendtocook\n");
+    for (; it != _cookList.end(); it++)
+        if (it->allisOccuped() == false) {
+            it->manageCook(_name, pizza);
+            return (0);
+        }
+    return (84);
 }
