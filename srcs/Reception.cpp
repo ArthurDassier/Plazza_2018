@@ -63,7 +63,6 @@ std::list<Kitchen_inf> Reception::getKitchen()
 
 void Reception::goToKitchens(std::string command)
 {
-    pid_t child;
     char *str;
     std::list<Kitchen_inf>::iterator it;
 
@@ -128,7 +127,6 @@ int Reception::addKitchen()
     struct Kitchen_inf new_kitchen;
     int pos;
     std::string last_kitchen;
-    key_t key;
 
     if (_list_kitchen.size() == 0)
         pos = 1;
