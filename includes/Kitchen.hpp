@@ -10,6 +10,8 @@
 #include <vector>
 #include <unistd.h>
 #include <fstream>
+#include <cstring>
+#include <iostream>
 #include "Cook.hpp"
 
 class Kitchen
@@ -24,6 +26,8 @@ class Kitchen
         void workOnPizza(char *pathname, int shmid);
 
 
+        std::string takePizzas(std::string);
+
     private:
         int _name;
         char *_pathname;
@@ -37,5 +41,6 @@ class Kitchen
         int _eggplant;
         int _gruyere;
         int _mushrooms;
+        int _chief_love;
 };
 
