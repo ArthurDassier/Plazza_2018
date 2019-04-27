@@ -21,12 +21,11 @@ class Kitchen
 
         int getName();
         void setName(int name);
-        void workOnPizza(char *pathname, int shmid);
-
+        void workOnPizza(std::string pathname, int shmid);
 
     private:
         int _name;
-        char *_pathname;
+        std::string _pathname;
         std::vector<PizzaType> _PizzasToPrepare;
         std::vector<Cook> _cookTab;
         int _doe;

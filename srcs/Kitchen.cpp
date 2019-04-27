@@ -39,7 +39,7 @@ void Kitchen::setName(int name)
     _name = name;
 }
 
-void Kitchen::workOnPizza(char *pathname, int shmid)
+void Kitchen::workOnPizza(std::string pathname, int shmid)
 {
     char *str;
     std::fstream file(pathname, std::fstream::out | std::fstream::in);
@@ -47,10 +47,10 @@ void Kitchen::workOnPizza(char *pathname, int shmid)
     _pathname = pathname;
     while (1) {
         sleep(1);
-        str = (char*) shmat(shmid,(void*)0,0);
+        str = (char*) shmat(shmid, (void*)0, 0);
         if (strcmp(str, "fini") != 0) {
-            printf("CHUI LA KITCHEN%c : %s", pathname[strlen(pathname) - 1],
-            str);
+            printf("CHUI LA KITCHEN%c : %s\n",
+            pathname[strlen((char *)pathname.c_str()) - 1], str);
             file << str;
             sprintf(str, "%s", "fini");
         } else
