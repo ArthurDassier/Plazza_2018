@@ -21,7 +21,7 @@ class Kitchen
 
         int getName();
         void setName(int name);
-        void workOnPizza(key_t, char *pathname);
+        void workOnPizza(char *pathname, int shmid);
 
 
     private:

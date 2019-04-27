@@ -7,7 +7,6 @@
 
 #pragma once
 
-#include <string>
 #include "Plazza.hpp"
 #include "Kitchen.hpp"
 
@@ -20,14 +19,16 @@ class Reception
         int parseCommand();
         void setLastCommand(std::string new_command);
         std::string getLastCommand();
-        std::list<int> getKitchen();
+        std::list<Kitchen_inf> getKitchen();
         void goToKitchens(std::string);
+        void createKitchen(std::string &command);
+        int addKitchen();
 
     private:
         int _time;
         int _nb_cook;
         int _reset_food;
         std::string _command;
-        std::list<int> _list_kitchen;
+        std::list<Kitchen_inf> _list_kitchen;
         std::list<std::string> _list_key;
 };

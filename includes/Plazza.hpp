@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <cstdio>
 #include <list>
+#include <string>
 
 enum PizzaType
 {
@@ -20,4 +21,13 @@ enum PizzaType
     Margarita = 2,
     Americana = 4,
     Fantasia = 8
+};
+
+struct Kitchen_inf
+{
+    std::string pathname;
+    key_t key;
+    int shmid;
+    int name;
+    bool use;
 };

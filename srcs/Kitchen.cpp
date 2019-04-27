@@ -5,6 +5,7 @@
 ** kitchen.cpp
 */
 
+#include <string.h>
 #include "Kitchen.hpp"
 
 Kitchen::Kitchen(int name, int nb_cooks):
@@ -38,23 +39,23 @@ void Kitchen::setName(int name)
     _name = name;
 }
 
-void Kitchen::workOnPizza(key_t key, char *pathname)
+void Kitchen::workOnPizza(char *pathname, int shmid)
 {
-    int shmid = shmget(key,1024,0666|IPC_CREAT);
     char *str;
-    std::fstream file(pathname, std::fstream::out);
+    std::fstream file(pathname, std::fstream::out | std::fstream::in);
 
     _pathname = pathname;
-    sleep(3);
-    str = (char*) shmat(shmid,(void*)0,0);
-    printf("CHUI LA KITCHEN : %s", str);
-    file << str;
+    while (1) {
+        sleep(1);
+        str = (char*) shmat(shmid,(void*)0,0);
+        if (strcmp(str, "fini") != 0) {
+            printf("CHUI LA KITCHEN : %s", str);
+            file << str;
+            sprintf(str, "%s", "fini");
+        } else
+            std::cout << "j'attend" << std::endl;
+        shmdt(str);
+    }
     file.close();
-    shmdt(str);
-    sleep(3);
-    str = (char*) shmat(shmid,(void*)0,0);
-    printf("CHUI LA KITCHEN : %s", str);
-    shmdt(str);
     shmctl(shmid,IPC_RMID,NULL);
-
 }
