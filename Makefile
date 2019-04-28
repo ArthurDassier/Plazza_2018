@@ -11,6 +11,7 @@ SRC			= 	srcs/main.cpp				\
 				srcs/Cook.cpp				\
 				srcs/Kitchen.cpp			\
 				srcs/Reception.cpp			\
+				srcs/Parser.cpp
 
 OBJ			=	$(SRC:.cpp=.o)
 

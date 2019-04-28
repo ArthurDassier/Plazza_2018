@@ -1,0 +1,149 @@
+/*
+** EPITECH PROJECT, 2019
+** CPP_plazza_2018
+** File description:
+** Parser.cpp
+*/
+
+#include "Parser.hpp"
+
+Parser::Parser():
+    _order("")
+    // _type(""),
+    // _size(S),
+    // _nb(0)
+{
+}
+
+bool Parser::parseOrder()
+{
+    std::string order;
+    std::getline(std::cin, order);
+    std::string ord;
+    size_t i = 0;
+
+    for (std::string it : carveOrder(order, ';')) {
+        auto orderVector = std::make_unique<std::vector<std::string>>(carveOrder(it, ' '));
+        cleanOrder(orderVector);
+        for (auto &it_c : fillArray(*orderVector)) {
+            switch (i) {
+                case 0:
+                    if (!checkPizza(it_c))
+                        return (false);
+                    setPizzaType(it_c);
+                    break;
+                case 1:
+                    setPizzaSize(it_c);
+                    break;
+                case 2:
+                    setPizzaNumber(it_c);
+                    break;
+                default:
+                    break;
+            }
+            i++;
+        }
+        for (int j = 0; j < getPizzaNumber(); j++)
+            ord += getPizzaType() + "\n";
+        setOrder(_order += ord);
+        ord.clear();
+        i = 0;
+    }
+    return (true);
+}
+
+std::vector<std::string> Parser::carveOrder(std::string str, char c)
+{
+    std::vector<std::string> order;
+    std::string tmp;
+
+    for (char &it : str) {
+        if (it != c)
+            tmp += it;
+        else {
+            order.push_back(tmp);
+            tmp.clear();
+        }
+    }
+    order.push_back(tmp);
+    tmp.clear();
+    return order;
+}
+
+void Parser::cleanOrder(std::unique_ptr<std::vector<std::string>> &order)
+{
+    std::vector<std::string> tmp;
+
+    for (auto &it : *order) {
+        if (it != "")
+            tmp.push_back(it);
+    }
+    order->swap(tmp);
+}
+
+std::array<std::string, 3> Parser::fillArray(std::vector<std::string> order)
+{
+    std::array<std::string, 3> tmp;
+    size_t i = 0;
+
+    for (std::string &it : order) {
+        if (i >= 3)
+            break;
+        tmp[i] = it;
+        i++;
+    }
+    return tmp;
+}
+
+bool Parser::checkPizza(std::string pizza)
+{
+    auto it = std::find_if(std::begin(_pizzas), std::end(_pizzas),
+                           [&](std::string i) {
+                               return (boost::iequals(pizza, i));
+                           });
+    if (it == std::end(_pizzas))
+        return (false);
+    return (true);
+}
+
+void Parser::setOrder(std::string order)
+{
+    _order = order;
+}
+
+std::string Parser::getOrder() const noexcept
+{
+    return _order;
+}
+
+void Parser::setPizzaType(std::string type)
+{
+    _type = type;
+}
+
+std::string Parser::getPizzaType() const noexcept
+{
+    return _type;
+}
+
+void Parser::setPizzaSize(std::string size)
+{
+    // _size.push_back(size);
+}
+
+PizzaSize Parser::getPizzaSize() const noexcept
+{
+    return _size;
+}
+
+void Parser::setPizzaNumber(std::string nb)
+{
+    if (nb.front() == 'x')
+        nb.erase(nb.begin(), nb.begin() + 1);
+    _nb = std::stoi(nb);
+}
+
+int Parser::getPizzaNumber() const noexcept
+{
+    return _nb;
+}

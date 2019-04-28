@@ -16,7 +16,6 @@ class Reception
         Reception(int time, int nb_cook, int reset_food);
         ~Reception();
 
-        int parseCommand();
         void setLastCommand(std::string new_command);
         std::string getLastCommand();
         std::list<Kitchen_inf> getKitchen();
