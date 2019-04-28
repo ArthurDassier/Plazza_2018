@@ -18,7 +18,7 @@
 class Parser
 {
     public:
-        Parser();
+        Parser() = default;
         ~Parser() = default;
 
         bool parseOrder();

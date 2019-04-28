@@ -7,14 +7,6 @@
 
 #include "Parser.hpp"
 
-Parser::Parser():
-    _order("")
-    // _type(""),
-    // _size(S),
-    // _nb(0)
-{
-}
-
 bool Parser::parseOrder()
 {
     std::string order;
