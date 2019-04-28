@@ -49,7 +49,7 @@ void Kitchen::setName(int name)
 
 std::string Kitchen::takePizzas(std::string command)
 {
-    std::vector<int> pizzas_to_do;
+    std::vector<PizzaType> pizzas_to_do;
     std::vector<std::string> pizzas_left;
     std::string pizza;
     std::string final_command;
@@ -58,15 +58,15 @@ std::string Kitchen::takePizzas(std::string command)
         if (it != '\n')
             pizza += it;
         else {
-            pizzas_to_do.push_back(atoi(pizza.c_str()));
+            pizzas_to_do.push_back(static_cast<PizzaType>(atoi(pizza.c_str())));
             pizza.clear();
         }
     }
     printf("avant le for\n");
-    for (int &it : pizzas_to_do) {
-        if (it == 1 && _doe > 0 && _tomato > 0 && _gruyere > 0 && _ham > 0 && _mushrooms > 0) {
+    for (PizzaType &it : pizzas_to_do) {
+        if (it == Regina && _doe > 0 && _tomato > 0 && _gruyere > 0 && _ham > 0 && _mushrooms > 0) {
             printf("dans le 1\n");
-            if (sendToCook((PizzaType)it) == 0) {
+            if (sendToCook(it) == 0) {
                 _doe -= 1;
                 _tomato -= 1;
                 _gruyere -= 1;
@@ -76,8 +76,8 @@ std::string Kitchen::takePizzas(std::string command)
                 pizzas_left.push_back(std::to_string(it));
                 pizzas_left.back() += '\n';
             }
-        } else if (it == 2 && _doe > 0 && _tomato > 0 && _gruyere > 0) {
-            if (sendToCook((PizzaType)it) == 0) {
+        } else if (it == Margarita && _doe > 0 && _tomato > 0 && _gruyere > 0) {
+            if (sendToCook(it) == 0) {
                 _doe -= 1;
                 _tomato -= 1;
                 _gruyere -= 1;
@@ -85,8 +85,8 @@ std::string Kitchen::takePizzas(std::string command)
                 pizzas_left.push_back(std::to_string(it));
                 pizzas_left.back() += '\n';
             }
-        } else if (it == 3 && _doe > 0 && _tomato > 0 && _gruyere > 0 && _steak > 0) {
-            if (sendToCook((PizzaType)it) == 0) {
+        } else if (it == Americana && _doe > 0 && _tomato > 0 && _gruyere > 0 && _steak > 0) {
+            if (sendToCook(it) == 0) {
                 _doe -= 1;
                 _tomato -= 1;
                 _gruyere -= 1;
@@ -95,8 +95,8 @@ std::string Kitchen::takePizzas(std::string command)
                 pizzas_left.push_back(std::to_string(it));
                 pizzas_left.back() += '\n';
             }
-        } else if (it == 4 && _doe > 0 && _tomato > 0 && _eggplant > 0 && _goat_cheese > 0 && _chief_love > 0) {
-            if (sendToCook((PizzaType)it) == 0) {
+        } else if (it == Fantasia && _doe > 0 && _tomato > 0 && _eggplant > 0 && _goat_cheese > 0 && _chief_love > 0) {
+            if (sendToCook(it) == 0) {
                 _doe -= 1;
                 _tomato -= 1;
                 _eggplant -= 1;

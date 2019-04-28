@@ -11,8 +11,8 @@
 #include <unistd.h>
 #include <fstream>
 #include <cstring>
-#include <iostream>
 #include <pthread.h>
+#include "Plazza.hpp"
 #include "Cook.hpp"
 
 class Kitchen

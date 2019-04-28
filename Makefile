@@ -7,34 +7,34 @@
 
 NAME		=	plazza
 
-CXX	=	g++ -std=c++11 -g3 -lpthread
+CXX			=	g++ -std=c++17 -g3
 
 TEST_NAME	=	unit_test_plazza
 
-SRC_DIR	=	./srcs
+SRC_DIR		=	./srcs
 
-UT_DIR	=	./tests
+UT_DIR		=	./tests
 
-EXE		= 	$(SRC_DIR)/main.cpp				\
-			$(SRC_DIR)/Cook.cpp				\
-			$(SRC_DIR)/Kitchen.cpp			\
-			$(SRC_DIR)/Reception.cpp		\
+EXE			= 	$(SRC_DIR)/main.cpp				\
+				$(SRC_DIR)/Cook.cpp				\
+				$(SRC_DIR)/Kitchen.cpp			\
+				$(SRC_DIR)/Reception.cpp		\
 
-OBJS	=	$(EXE:.cpp=.o)
+OBJS		=	$(EXE:.cpp=.o)
 
-UT 		= 	$(UT_DIR)/tests_Kitchen.cpp		\
+UT 			= 	$(UT_DIR)/tests_Kitchen.cpp		\
 
-UT2	=	$(SRC_DIR)/Cook.cpp				\
-		$(SRC_DIR)/Kitchen.cpp			\
-		$(SRC_DIR)/Reception.cpp		\
+UT2			=	$(SRC_DIR)/Cook.cpp				\
+				$(SRC_DIR)/Kitchen.cpp			\
+				$(SRC_DIR)/Reception.cpp		\
 
-OBJS_UT	=	$(UT:.cpp=.o)
+OBJS_UT		=	$(UT:.cpp=.o)
 
 OBJS_UT2	=	$(UT2:.cpp=.o)
 
-RM	=	rm -rf
+RM			=	rm -rf
 
-CXXFLAGS	=	-Wall -Wextra -g3
+CXXFLAGS	=	-Wall -Wextra -lpthread
 
 CXXFLAGS	+=	-I ./includes
 
