@@ -10,6 +10,7 @@
 #include "Kitchen.hpp"
 #include "Cook.hpp"
 #include "Parser.hpp"
+#include "PlazzaError.hpp"
 
 static void plazza(char **av)
 {
@@ -17,14 +18,12 @@ static void plazza(char **av)
     Parser parser;
 
     while (1) {
-        if (!parser.parseOrder()) {
-            std::cout << "heuu c'est pas le nom d'une pizza" <<
-            std::endl;
-        } else {
+        try {
+            parser.parseOrder();
             reception.setLastCommand(parser.getOrder());
-            std::cout << "Wow il commande une pizza " <<
-            reception.getLastCommand() << std::endl;
             reception.goToKitchens(reception.getLastCommand());
+        } catch (PlazzaError const &e) {
+            std::cerr << e.what() << std::endl;
         }
     }
 }
