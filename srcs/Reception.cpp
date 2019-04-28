@@ -54,10 +54,10 @@ void Reception::goToKitchens(std::string command)
                 command.clear();
                 return;
             } else {
-                //modifier command
-                printf("%s\n", command.c_str());
+                command = str;
+                printf("ARET %s\n", command.c_str());
             }
-           sprintf(str, "%s", command.c_str());
+            sprintf(str, "%s", command.c_str());
             shmdt(str);
         }
         createKitchen(command);
@@ -80,7 +80,7 @@ void Reception::createKitchen(std::string &command)
     it = _list_kitchen.end();
     it--;
     std::cout << it->pathname.c_str() << std::endl;
-    std::cout << _list_kitchen.size() << std::endl;
+    // std::cout << _list_kitchen.size() << std::endl;
     std::cout << it->name << std::endl;
     if ((child = fork()) == 0) {
         Kitchen new_kitchen(it->name, _nb_cook, _reset_food, _time);
@@ -91,16 +91,15 @@ void Reception::createKitchen(std::string &command)
         sprintf(str, "%s\n", command.c_str());
         shmdt(str);
     }
-    sleep(2);
+    sleep(4);
     int shmid = shmget(it->key,1024,0666|IPC_CREAT);
     str = (char*) shmat(shmid,(void*)0,0);
     if (strcmp(str, "fini") == 0) {
         printf("ya plus de pizza\n");
         command.clear();
-    } else {
-        //modifier la commande
-        printf("%s\n", str);
-    }
+    } else
+        printf("coucou");
+        //command = str;
     shmdt(str);
 }
 
@@ -118,8 +117,8 @@ int Reception::addKitchen()
         pos = _list_kitchen.size() + 1;
     last_kitchen = std::to_string(pos);
     kitchen_name += last_kitchen;
-    std::cout << kitchen_name << std::endl;
-    std::cout << pos << std::endl;
+    // std::cout << kitchen_name << std::endl;
+    // std::cout << pos << std::endl;
     new_kitchen.name = nb_kitchen;
     new_kitchen.pathname = kitchen_name;
     new_kitchen.use = true;

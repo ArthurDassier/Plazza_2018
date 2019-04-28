@@ -62,58 +62,57 @@ std::string Kitchen::takePizzas(std::string command)
             pizza.clear();
         }
     }
-    printf("avant le for\n");
     for (PizzaType &it : pizzas_to_do) {
         if (it == Regina && _doe > 0 && _tomato > 0 && _gruyere > 0 && _ham > 0 && _mushrooms > 0) {
-            printf("dans le 1\n");
-            if (sendToCook(it) == 0) {
+            // if (sendToCook(it) == 0) {
                 _doe -= 1;
                 _tomato -= 1;
                 _gruyere -= 1;
                 _ham -= 1;
                 _mushrooms -= 1;
-            } else {
-                pizzas_left.push_back(std::to_string(it));
-                pizzas_left.back() += '\n';
-            }
+            // } else {
+            //     pizzas_left.push_back(std::to_string(it));
+            //     pizzas_left.back() += '\n';
+            // }
         } else if (it == Margarita && _doe > 0 && _tomato > 0 && _gruyere > 0) {
-            if (sendToCook(it) == 0) {
+            printf("dans la Margarita\n");
+            // if (sendToCook(it) == 0) {
                 _doe -= 1;
                 _tomato -= 1;
                 _gruyere -= 1;
-            } else {
-                pizzas_left.push_back(std::to_string(it));
-                pizzas_left.back() += '\n';
-            }
+            // } else {
+            //     pizzas_left.push_back(std::to_string(it));
+            //     pizzas_left.back() += '\n';
+            // }
         } else if (it == Americana && _doe > 0 && _tomato > 0 && _gruyere > 0 && _steak > 0) {
-            if (sendToCook(it) == 0) {
+            // if (sendToCook(it) == 0) {
                 _doe -= 1;
                 _tomato -= 1;
                 _gruyere -= 1;
                 _steak -= 1;
-            } else {
-                pizzas_left.push_back(std::to_string(it));
-                pizzas_left.back() += '\n';
-            }
+            // } else {
+            //     pizzas_left.push_back(std::to_string(it));
+            //     pizzas_left.back() += '\n';
+            // }
         } else if (it == Fantasia && _doe > 0 && _tomato > 0 && _eggplant > 0 && _goat_cheese > 0 && _chief_love > 0) {
-            if (sendToCook(it) == 0) {
+            // if (sendToCook(it) == 0) {
                 _doe -= 1;
                 _tomato -= 1;
                 _eggplant -= 1;
                 _goat_cheese -= 1;
                 _chief_love -= 1;
-            } else {
-                pizzas_left.push_back(std::to_string(it));
-                pizzas_left.back() += '\n';
-            }
+            // } else {
+            //     pizzas_left.push_back(std::to_string(it));
+            //     pizzas_left.back() += '\n';
+            // }
         } else {
-            printf("dans le else fin\n");
             pizzas_left.push_back(std::to_string(it));
             pizzas_left.back() += '\n';
         }
     }
     for (std::string &it : pizzas_left)
         final_command += it;
+    std::cout << "CA CASSE LES COUILLES " << final_command;
     return (final_command);
 }
 
@@ -134,10 +133,15 @@ void Kitchen::workOnPizza(std::string pathname, int shmid)
             lock_clock = 0;
             clocke = 0;
             std::string tmp(str);
-            tmp = takePizzas("1\n");
+            std::string other;
+            other = takePizzas("2\n2\n");
             if (tmp.size() == 0) {
                 sprintf(str, "%s", "fini");
+            } else {
+                std::cout << "ce qu'il reste " << other;
+                sprintf(str, "%s", other.c_str());
             }
+                // printf("ce qu'il reste : %s", tmp.c_str());
             // printf("CHUI LA KITCHEN%c : %s\n",
             // pathname[strlen((char *)pathname.c_str()) - 1], str);
             // file << str;
@@ -157,7 +161,7 @@ int Kitchen::sendToCook(PizzaType pizza)
 {
     std::list<Cook>::iterator it = _cookList.begin();
 
-    printf("dans sendtocook\n");
+    // printf("dans sendtocook\n");
     for (; it != _cookList.end(); it++)
         if (it->allisOccuped() == false) {
             it->manageCook(_name, pizza);
