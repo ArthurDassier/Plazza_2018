@@ -9,7 +9,7 @@
 
 std::mutex mutex;
 
-Cook::Cook(int name, double timeWait)
+Cook::Cook(int name, int timeWait)
 {
     _name = name;
     _timeWait = timeWait;
@@ -45,21 +45,25 @@ bool Cook::allisOccuped() const
 
 static void *createPizza(void *cc)
 {
-    // struct createPizza_inf *info = (struct createPizza_inf *)cc;
+    struct createPizza_inf *info = (struct createPizza_inf *)cc;
     void *ret;
 
-    (void)cc;
     mutex.lock();
-    sleep(5);
-    // std::cout << "~je suis " << info->pizza << std::endl;
+    switch (info->pizza) {
+        case 1: sleep(info->timeWait * 2);
+            break;
+        case 2: sleep(info->timeWait * 1);
+            break;
+        case 4: sleep(info->timeWait * 2);
+            break;
+        case 8: sleep(info->timeWait * 4);
+            break;
+        default: sleep(1);
+            break;
+    }
+    std::cout << "Cook finish pizza" << std::endl;
     mutex.unlock();
     return (ret);
-    // mutex.lock();
-    // sleep(info->timeWait/1000);
-    // std::cout << "le cook" << info->name << " de kitchen" << info->kitchen 
-    // << " a end " << info->pizza << std::endl;
-    // mutex.unlock();
-    // return (cc);
 }
 
 void Cook::manageCook(int kitchen, PizzaType pizza)

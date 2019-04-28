@@ -11,7 +11,7 @@
 #include <cmath>
 #include "Kitchen.hpp"
 
-Kitchen::Kitchen(int name, int nb_cooks, int timeRestock, double timePrepare):
+Kitchen::Kitchen(int name, int nb_cooks, int timeRestock, int timePrepare):
     _name(name),
     _doe(5),
     _ham(5),
