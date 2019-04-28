@@ -120,7 +120,12 @@ PizzaType Parser::getPizzaType() const noexcept
 
 void Parser::setPizzaSize(std::string size)
 {
-    // _size = size;
+    auto it = std::find_if(std::begin(_sizes), std::end(_sizes),
+                           [&](std::pair<PizzaSize, std::string> i) {
+                               return (boost::iequals(size, i.second));
+                           });
+    if (it != std::end(_sizes))
+        _size = it->first;
 }
 
 PizzaSize Parser::getPizzaSize() const noexcept
