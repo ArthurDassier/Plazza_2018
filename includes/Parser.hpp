@@ -48,6 +48,14 @@ class Parser
             std::make_pair(Americana, "Americana"),
             std::make_pair(Fantasia, "Fantasia")
         };
+        std::array<std::pair<PizzaSize, std::string>, 5> _sizes
+        {
+            std::make_pair(S, "S"),
+            std::make_pair(M, "M"),
+            std::make_pair(L, "L"),
+            std::make_pair(XL, "XL"),
+            std::make_pair(XXL, "XXL")
+        };
         std::string _order;
         PizzaType _type;
         PizzaSize _size;
