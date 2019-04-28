@@ -20,10 +20,11 @@ EXE			= 	$(SRC_DIR)/main.cpp				\
 				$(SRC_DIR)/Kitchen.cpp			\
 				$(SRC_DIR)/Reception.cpp		\
 				$(SRC_DIR)/Parser.cpp			\
+				$(SRC_DIR)/PlazzaError.cpp
 
 OBJS		=	$(EXE:.cpp=.o)
 
-UT 			= 	$(UT_DIR)/tests_Reception.cpp		\
+UT 			= 	$(UT_DIR)/tests_Reception.cpp	\
 
 UT2			=	$(SRC_DIR)/Cook.cpp				\
 				$(SRC_DIR)/Kitchen.cpp			\
