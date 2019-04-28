@@ -6,6 +6,9 @@
 */
 
 #include <string.h>
+#include <iostream>
+#include <ctime>
+#include <cmath>
 #include "Kitchen.hpp"
 
 Kitchen::Kitchen(int name, int nb_cooks, int timeRestock, double timePrepare):
@@ -118,21 +121,29 @@ void Kitchen::workOnPizza(std::string pathname, int shmid)
 {
     char *str;
     std::fstream file(pathname, std::fstream::out | std::fstream::in);
+    // clock_t camzer = clock();
 
     _pathname = pathname;
     while (1) {
         sleep(1);
         str = (char*) shmat(shmid, (void*)0, 0);
         if (strcmp(str, "fini") != 0) {
+            // camzer = clock();
             std::string tmp(str);
             tmp = takePizzas("1\n");
-            if (tmp.size() == 0)
+            if (tmp.size() == 0) {
                 sprintf(str, "%s", "fini");
+            }
             // printf("CHUI LA KITCHEN%c : %s\n",
             // pathname[strlen((char *)pathname.c_str()) - 1], str);
             // file << str;
-        } else
+        } else {
+            // if (((clock() - (float)camzer) / CLOCKS_PER_SEC) > 5) {
+            //     printf("je me detruit boom");
+            //     camzer = clock();
+            // }
             std::cout << "j'attend" << std::endl;
+        }
         shmdt(str);
     }
     file.close();

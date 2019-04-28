@@ -49,6 +49,7 @@ static void *createPizza(void *cc)
     struct createPizza_inf *info = (struct createPizza_inf *)cc;
 
     std::cout << "~je suis " << info->pizza << std::endl;
+    return (cc);
     // mutex.lock();
     // sleep(info->timeWait/1000);
     // std::cout << "le cook" << info->name << " de kitchen" << info->kitchen 
@@ -67,19 +68,36 @@ void Cook::manageCook(int kitchen, PizzaType pizza)
     if (t1isOccuped() == false) {
         _t1Occuped = true;
         pthread_create(&thread1, NULL, &createPizza, &cc);
-        return;
+        if (t1isOccuped() == true && t2isOccuped() == true) {
+            _allOcupped = true;
+            pthread_join(thread1, NULL);
+            _t1Occuped = false;
+            pthread_join(thread2, NULL);
+            _t2Occuped = false;
+            _allOcupped = false;
+            printf("jai tous fini\n");
+        }
     }
-    if (t2isOccuped() == false) {
+    else if (t2isOccuped() == false) {
         _t2Occuped = true;
         pthread_create(&thread2, NULL, &createPizza, &cc);
-        return;
+        if (t1isOccuped() == true && t2isOccuped() == true) {
+            _allOcupped = true;
+            pthread_join(thread1, NULL);
+            _t1Occuped = false;
+            pthread_join(thread2, NULL);
+            _t2Occuped = false;
+            _allOcupped = false;
+            printf("jai tous fini\n");
+        }
     }
-    if (t1isOccuped() == true && t2isOccuped() == true)
-        _allOcupped = true;
-    pthread_join(thread1, NULL);
-    _t1Occuped = false;
-    pthread_join(thread2, NULL);
-    _t2Occuped = false;
-    _allOcupped = false;
-    printf("jai tous fini\n");
+    // if (t1isOccuped() == true && t2isOccuped() == true) {
+    //     _allOcupped = true;
+    //     pthread_join(thread1, NULL);
+    //     _t1Occuped = false;
+    //     pthread_join(thread2, NULL);
+    //     _t2Occuped = false;
+    //     _allOcupped = false;
+    //     printf("jai tous fini\n");
+    // }
 }

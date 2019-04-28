@@ -72,8 +72,11 @@ void Reception::goToKitchens(std::string command)
                 printf("ya plus de pizza\n");
                 command.clear();
                 return;
+            } else {
+                //modifier command
+                printf("%s\n", command.c_str());
             }
-            sprintf(str, "%s", command.c_str());
+           sprintf(str, "%s", command.c_str());
             shmdt(str);
         }
         createKitchen(command);
@@ -113,7 +116,11 @@ void Reception::createKitchen(std::string &command)
     if (strcmp(str, "fini") == 0) {
         printf("ya plus de pizza\n");
         command.clear();
+    } else {
+        //modifier la commande
+        printf("%s\n", str);
     }
+    shmdt(str);
 }
 
 int Reception::addKitchen()
