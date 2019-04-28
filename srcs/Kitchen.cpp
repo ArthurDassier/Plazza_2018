@@ -127,25 +127,36 @@ void Kitchen::workOnPizza(std::string pathname, int shmid)
     std::fstream file(pathname, std::fstream::out | std::fstream::in);
     int clocke = 0;
     int lock_clock = 0;
+    static int ntm = 0;
 
     _pathname = pathname;
     while (1) {
         sleep(1);
         if (lock_clock == 1)
             clocke++;
+        if (clocke == (_timeRestock / 1000))
+            restock();
         str = (char*) shmat(shmid, (void*)0, 0);
         if (strcmp(str, "fini") != 0) {
-            lock_clock = 0;
-            clocke = 0;
-            std::string tmp(str);
-            std::string other;
-            printf("je vais taff\n");
-            other = takePizzas(tmp);
-            if (other.size() == 0) {
-                sprintf(str, "%s", "fini");
-            } else {
-                std::cout << "ce qu'il reste " << other;
-                sprintf(str, "%s", other.c_str());
+            if (_doe == 0 || _ham == 0 || _steak == 0 || _goat_cheese == 0 ||
+                _tomato == 0 || _eggplant == 0 || _gruyere == 0 || _mushrooms == 0 ||
+                _chief_love == 0) {
+                ntm++;
+                if (ntm == 5)
+                    exit (0);
+                }
+            else {
+                ntm = 0;
+                lock_clock = 0;
+                clocke = 0;
+                std::string tmp(str);
+                std::string other;
+                other = takePizzas(tmp);
+                if (other.size() == 0) {
+                    sprintf(str, "%s", "fini");
+                } else {
+                    sprintf(str, "%s", other.c_str());
+                }
             }
                 // printf("ce qu'il reste : %s", tmp.c_str());
             // printf("CHUI LA KITCHEN%c : %s\n",
@@ -153,8 +164,10 @@ void Kitchen::workOnPizza(std::string pathname, int shmid)
             // file << str;
         } else {
             lock_clock = 1;
-            if (clocke == 5)
+            if (clocke == 5) {
                 printf("je me detruit boom\n");
+                exit (0);
+            }
             std::cout << "j'attend" << std::endl;
         }
         shmdt(str);
@@ -168,12 +181,24 @@ int Kitchen::sendToCook(PizzaType pizza)
     std::list<Cook>::iterator it = _cookList.begin();
 
     // printf("dans sendtocook\n");
-/*    for (; it != _cookList.end(); it++)
+    for (; it != _cookList.end(); it++)
         if (it->allisOccuped() == false) {
             it->manageCook(_name, pizza);
             printf(":/\n");
             return (0);
         }
-    return (84);*/
-    return (0);
+    return (84);
+}
+
+void Kitchen::restock()
+{
+    _doe++;
+    _ham++;
+    _steak++;
+    _goat_cheese++;
+    _tomato++;
+    _eggplant++;
+    _gruyere++;
+    _mushrooms++;
+    _chief_love++;
 }
