@@ -5,6 +5,8 @@
 ** Parser.cpp
 */
 
+#include <iostream>
+#include <algorithm>
 #include "Parser.hpp"
 
 bool Parser::parseOrder()
@@ -90,7 +92,7 @@ bool Parser::checkPizza(std::string pizza)
 {
     auto it = std::find_if(std::begin(_pizzas), std::end(_pizzas),
                            [&](std::pair<PizzaType, std::string> i) {
-                               return (boost::iequals(pizza, i.second));
+                               return (pizza.compare(i.second));
                            });
     if (it == std::end(_pizzas))
         return (false);
@@ -122,7 +124,7 @@ void Parser::setPizzaSize(std::string size)
 {
     auto it = std::find_if(std::begin(_sizes), std::end(_sizes),
                            [&](std::pair<PizzaSize, std::string> i) {
-                               return (boost::iequals(size, i.second));
+                               return (size.compare(i.second));
                            });
     if (it != std::end(_sizes))
         _size = it->first;

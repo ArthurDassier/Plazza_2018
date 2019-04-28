@@ -9,7 +9,6 @@
     #define PARSER_HPP_
 
 #include <array>
-#include <boost/algorithm/string.hpp>
 #include <memory>
 #include <string>
 #include <vector>

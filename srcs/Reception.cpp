@@ -9,7 +9,6 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <string.h>
-#include <boost/algorithm/string.hpp>
 #include "Reception.hpp"
 
 Reception::Reception(int time, int nb_cook, int reset_food):
