@@ -71,8 +71,8 @@ std::string Kitchen::takePizzas(std::string pathname, std::string command)
                 _gruyere -= 1;
                 _ham -= 1;
                 _mushrooms -= 1;
-                file << "Regina en preparation" << std::endl;
-                file << "Regina en preparation" << std::endl;
+                std::cout << "Regina in preparation" << std::endl;
+                file << "Regina in preparation" << std::endl;
             } else {
                 pizzas_left.push_back(std::to_string(it));
                 pizzas_left.back() += '\n';
@@ -82,8 +82,8 @@ std::string Kitchen::takePizzas(std::string pathname, std::string command)
                 _doe -= 1;
                 _tomato -= 1;
                 _gruyere -= 1;
-                std::cout << "Margarita en preparation" << std::endl;
-                file << "Margarita en preparation" << std::endl;
+                std::cout << "Margarita in preparation" << std::endl;
+                file << "Margarita in preparation" << std::endl;
             } else {
                 pizzas_left.push_back(std::to_string(it));
                 pizzas_left.back() += '\n';
@@ -94,8 +94,8 @@ std::string Kitchen::takePizzas(std::string pathname, std::string command)
                 _tomato -= 1;
                 _gruyere -= 1;
                 _steak -= 1;
-                std::cout << "Americana en preparation" << std::endl;
-                file << "Americana en preparation" << std::endl;
+                std::cout << "Americana in preparation" << std::endl;
+                file << "Americana in preparation" << std::endl;
             } else {
                 pizzas_left.push_back(std::to_string(it));
                 pizzas_left.back() += '\n';
@@ -107,8 +107,8 @@ std::string Kitchen::takePizzas(std::string pathname, std::string command)
                 _eggplant -= 1;
                 _goat_cheese -= 1;
                 _chief_love -= 1;
-                std::cout << "Fantasia en preparation" << std::endl;
-                file << "Fantasia en preparation" << std::endl;
+                std::cout << "Fantasia in preparation" << std::endl;
+                file << "Fantasia in preparation" << std::endl;
             } else {
                 pizzas_left.push_back(std::to_string(it));
                 pizzas_left.back() += '\n';
@@ -148,9 +148,11 @@ void Kitchen::workOnPizza(std::string pathname, int shmid)
                 _tomato == 0 || _eggplant == 0 || _gruyere == 0 || _mushrooms == 0 ||
                 _chief_love == 0) {
                 ntm++;
-                if (ntm == 5)
+                if (ntm == 5) {
+                    std::cout << "Kitchen " << _name << " closed" << std::endl;
                     exit (0);
                 }
+            }
             else {
                 ntm = 0;
                 lock_clock = 0;
@@ -167,10 +169,10 @@ void Kitchen::workOnPizza(std::string pathname, int shmid)
         } else {
             lock_clock = 1;
             if (clocke == 5) {
-                printf("je me detruit boom\n");
+                std::cout << "Kitchen " << _name << " closed" << std::endl;
                 exit (0);
             }
-            std::cout << "j'attend" << std::endl;
+            std::cout << "Kitchen " << _name << " is waiting" << std::endl;
         }
         shmdt(str);
     }
@@ -185,7 +187,6 @@ int Kitchen::sendToCook(PizzaType pizza)
     for (; it != _cookList.end(); it++)
         if (it->allisOccuped() == false) {
             it->manageCook(_name, pizza);
-            printf(":/\n");
             return (0);
         }
     return (84);

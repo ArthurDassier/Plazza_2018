@@ -69,8 +69,7 @@ void Reception::createKitchen(std::string &command)
     addKitchen();
     it = _list_kitchen.end();
     it--;
-    std::cout << it->pathname.c_str() << std::endl;
-    std::cout << it->name << std::endl;
+    std::cout << "Kitchen " << it->name << " created" << std::endl;
     if ((child = fork()) == 0) {
         Kitchen new_kitchen(it->name, _nb_cook, _reset_food, _time);
         new_kitchen.workOnPizza(it->pathname, it->shmid);

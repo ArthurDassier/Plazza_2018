@@ -66,7 +66,17 @@ void Cook::manageCook(int kitchen, PizzaType pizza)
 {
     struct createPizza_inf cc = {_name, kitchen, pizza, _timeWait};
 
-    std::cout << "je suis " << pizza << " " << cc.pizza << std::endl;
+    std::cout << "Cook of Kitchen " << kitchen << " prepare ";
+    switch (pizza) {
+        case 1: std::cout << "Regina" << std::endl;
+            break;
+        case 2: std::cout << "Margarita" << std::endl;
+            break;
+        case 4: std::cout << "Americana" << std::endl;
+            break;
+        case 8: std::cout << "Fantasia" << std::endl;
+            break;
+    }
     if (t1isOccuped() == false) {
         _t1Occuped = true;
         pthread_create(&_thread1, NULL, &createPizza, &cc);
