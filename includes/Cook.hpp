@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Plazza.hpp"
+#include "PlazzaError.hpp"
 
 struct createPizza_inf
 {

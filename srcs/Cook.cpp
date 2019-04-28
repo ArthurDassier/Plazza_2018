@@ -79,12 +79,14 @@ void Cook::manageCook(int kitchen, PizzaType pizza)
     }
     if (t1isOccuped() == false) {
         _t1Occuped = true;
-        pthread_create(&_thread1, NULL, &createPizza, &cc);
+        if (pthread_create(&_thread1, NULL, &createPizza, &cc))
+            throw(ThreadError("pthread_create() error."));
         return;
     }
     else if (t2isOccuped() == false) {
         _t2Occuped = true;
-        pthread_create(&_thread2, NULL, &createPizza, &cc);
+        if (pthread_create(&_thread2, NULL, &createPizza, &cc))
+            throw(ThreadError("pthread_create() error."));
         return;
     }
     if (t1isOccuped() == true && t2isOccuped() == true) {

@@ -14,6 +14,7 @@
 #include <pthread.h>
 #include "Plazza.hpp"
 #include "Cook.hpp"
+#include "PlazzaError.hpp"
 
 class Kitchen
 {
