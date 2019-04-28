@@ -22,7 +22,6 @@ bool Parser::parseOrder()
                 case 0:
                     if (!checkPizza(it_c))
                         return (false);
-                    setPizzaType(it_c);
                     break;
                 case 1:
                     setPizzaSize(it_c);
@@ -36,7 +35,7 @@ bool Parser::parseOrder()
             i++;
         }
         for (int j = 0; j < getPizzaNumber(); j++)
-            ord += getPizzaType() + "\n";
+            ord += std::to_string(getPizzaType()) + "\n";
         setOrder(_order += ord);
         ord.clear();
         i = 0;
@@ -90,11 +89,12 @@ std::array<std::string, 3> Parser::fillArray(std::vector<std::string> order)
 bool Parser::checkPizza(std::string pizza)
 {
     auto it = std::find_if(std::begin(_pizzas), std::end(_pizzas),
-                           [&](std::string i) {
-                               return (boost::iequals(pizza, i));
+                           [&](std::pair<PizzaType, std::string> i) {
+                               return (boost::iequals(pizza, i.second));
                            });
     if (it == std::end(_pizzas))
         return (false);
+    setPizzaType(it->first);
     return (true);
 }
 
@@ -108,19 +108,19 @@ std::string Parser::getOrder() const noexcept
     return _order;
 }
 
-void Parser::setPizzaType(std::string type)
+void Parser::setPizzaType(PizzaType type)
 {
     _type = type;
 }
 
-std::string Parser::getPizzaType() const noexcept
+PizzaType Parser::getPizzaType() const noexcept
 {
     return _type;
 }
 
 void Parser::setPizzaSize(std::string size)
 {
-    // _size.push_back(size);
+    // _size = size;
 }
 
 PizzaSize Parser::getPizzaSize() const noexcept
