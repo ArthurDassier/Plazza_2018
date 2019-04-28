@@ -7,7 +7,7 @@
 
 NAME		=	plazza
 
-CXX			=	g++ -std=c++11 -g3 -pthread
+CXX			=	g++ -std=c++17 -g3 -pthread
 
 TEST_NAME	=	unit_test_plazza
 
@@ -19,6 +19,7 @@ EXE			= 	$(SRC_DIR)/main.cpp				\
 				$(SRC_DIR)/Cook.cpp				\
 				$(SRC_DIR)/Kitchen.cpp			\
 				$(SRC_DIR)/Reception.cpp		\
+				$(SRC_DIR)/Parser.cpp			\
 
 OBJS		=	$(EXE:.cpp=.o)
 

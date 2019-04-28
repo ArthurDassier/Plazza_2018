@@ -5,6 +5,11 @@
 ** reception.cpp
 */
 
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <string.h>
+#include <boost/algorithm/string.hpp>
 #include "Reception.hpp"
 
 Reception::Reception(int time, int nb_cook, int reset_food):
@@ -16,30 +21,6 @@ Reception::Reception(int time, int nb_cook, int reset_food):
 
 Reception::~Reception()
 {
-}
-
-int Reception::parseCommand()
-{
-    std::string str;
-
-    std::getline(std::cin, str);
-    if (str.compare("Regina") == 0) {
-        setLastCommand("Regina");
-        return (0);
-    }
-    if (str.compare("Margarita") == 0) {
-        setLastCommand("Margarita");
-        return (0);
-    }
-    if (str.compare("Americana") == 0) {
-        setLastCommand("Americana");
-        return (0);
-    }
-    if (str.compare("Fantasia") == 0) {
-        setLastCommand("Fantasia");
-        return (0);
-    }
-    return (84);
 }
 
 void Reception::setLastCommand(std::string new_command)
