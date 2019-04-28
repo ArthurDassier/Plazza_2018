@@ -16,7 +16,7 @@
 class Parser
 {
     public:
-        Parser() = default;
+        Parser();
         ~Parser() = default;
 
         bool parseOrder();
@@ -24,12 +24,11 @@ class Parser
         std::vector<std::string> carveOrder(std::string, char);
         void cleanOrder(std::unique_ptr<std::vector<std::string>> &);
         std::array<std::string, 3> fillArray(std::vector<std::string>);
-        bool checkPizza(std::string);
 
         void setOrder(std::string);
         std::string getOrder() const noexcept;
 
-        void setPizzaType(PizzaType);
+        void setPizzaType(std::string);
         PizzaType getPizzaType() const noexcept;
 
         void setPizzaSize(std::string);
@@ -37,6 +36,9 @@ class Parser
 
         void setPizzaNumber(std::string);
         int getPizzaNumber() const noexcept;
+
+        void setError(bool);
+        bool getError() const noexcept;
 
         bool iequals(const std::string &, const std::string &);
 
@@ -60,4 +62,5 @@ class Parser
         PizzaType _type;
         PizzaSize _size;
         int _nb;
+        bool _error;
 };
