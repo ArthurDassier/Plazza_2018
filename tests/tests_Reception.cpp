@@ -5,15 +5,22 @@
 ** tests_reception
 */
 
-
 #include <criterion/criterion.h>
 #include <criterion/redirect.h>
 #include "Reception.hpp"
 
-Test(tests_SDL, setLastCommand)
+Test(tests_Reception, setLastCommand_1)
 {
     Reception test(1, 1, 1);
 
     test.setLastCommand("WOOOOOWWW");
     cr_assert_eq(test.getLastCommand(), "WOOOOOWWW");
+}
+
+Test(tests_Reception, setLastCommand_2)
+{
+    Reception test(1, 1, 1);
+
+    test.setLastCommand("");
+    cr_assert_eq(test.getLastCommand(), "");
 }
