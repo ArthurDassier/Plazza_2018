@@ -30,13 +30,18 @@ static void plazza(char **av)
 
 int main(int ac, char **av)
 {
-    if (ac != 4)
-        return (84);
-    for (int i = 1; av[i] != NULL; ++i) {
-        for (int j = 0; av[i][j] != '\0'; ++j) {
-            if (!isdigit(av[i][j]))
-                return (84);
+    try {
+        if (ac != 4)
+            throw(InputError("Too few parameters."));
+        for (int i = 1; av[i] != NULL; ++i){
+            for (int j = 0; av[i][j] != '\0'; ++j) {
+                if (!isdigit(av[i][j]))
+                    throw(InputError("Parameters must be digits."));
+            }
         }
+    } catch(PlazzaError const &e) {
+        std::cerr << e.what() << std::endl;
+        return (ERROR);
     }
     plazza(av);
     return (0);

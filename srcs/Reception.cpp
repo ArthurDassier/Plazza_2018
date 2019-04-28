@@ -48,8 +48,7 @@ void Reception::goToKitchens(std::string command)
         it = _list_kitchen.begin();
         for (; it != _list_kitchen.end(); it++) {
             str = (char*)shmat(it->shmid,(void*)0,0);
-            if (strcmp(str, "fini") == 0) {
-                printf("ya plus de pizza\n");
+            if (strcmp(str, "end") == 0) {
                 command.clear();
                 return;
             } else
@@ -59,12 +58,6 @@ void Reception::goToKitchens(std::string command)
         }
         createKitchen(command);
     }
-    // sleep(4);
-    // key_t nkey = ftok("log/tes", 65);
-    // int nshmid = shmget(nkey,1024,0666|IPC_CREAT);
-    // str = (char*) shmat(nshmid,(void*)0,0);
-    // sprintf(str, "COUCOU\n");
-    // shmdt(str);
 }
 
 void Reception::createKitchen(std::string &command)
@@ -90,10 +83,9 @@ void Reception::createKitchen(std::string &command)
     sleep(4);
     int shmid = shmget(it->key,1024,0666|IPC_CREAT);
     str = (char*) shmat(shmid,(void*)0,0);
-    if (strcmp(str, "fini") == 0) {
-        printf("y'a plus de pizzas\n");
+    if (strcmp(str, "end") == 0)
         command.clear();
-    } else {
+    else {
         std::string tmp(str);
         command = tmp;
     }

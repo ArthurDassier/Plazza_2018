@@ -134,7 +134,7 @@ void Kitchen::workOnPizza(std::string pathname, int shmid)
         if (clocke == (_timeRestock / 1000))
             restock();
         str = (char*) shmat(shmid, (void*)0, 0);
-        if (strcmp(str, "fini") != 0) {
+        if (strcmp(str, "end") != 0) {
             if (_doe == 0 || _ham == 0 || _steak == 0 || _goat_cheese == 0 ||
                 _tomato == 0 || _eggplant == 0 || _gruyere == 0 || _mushrooms == 0 ||
                 _chief_love == 0) {
@@ -150,7 +150,7 @@ void Kitchen::workOnPizza(std::string pathname, int shmid)
                 std::string other;
                 other = takePizzas(tmp);
                 if (other.size() == 0) {
-                    sprintf(str, "%s", "fini");
+                    sprintf(str, "%s", "end");
                 } else {
                     sprintf(str, "%s", other.c_str());
                 }
