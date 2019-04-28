@@ -7,7 +7,7 @@
 
 NAME		=	plazza
 
-CXX			=	g++ -std=c++17 -g3
+CXX			=	g++ -std=c++17 -g3 -pthread
 
 TEST_NAME	=	unit_test_plazza
 
@@ -34,7 +34,7 @@ OBJS_UT2	=	$(UT2:.cpp=.o)
 
 RM			=	rm -rf
 
-CXXFLAGS	=	-Wall -Wextra -lpthread
+CXXFLAGS	=	-Wall -Wextra 
 
 CXXFLAGS	+=	-I ./includes
 

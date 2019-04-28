@@ -121,7 +121,6 @@ void Kitchen::workOnPizza(std::string pathname, int shmid)
 {
     char *str;
     std::fstream file(pathname, std::fstream::out | std::fstream::in);
-    // clock_t camzer = clock();
     int clocke = 0;
     int lock_clock = 0;
 
@@ -132,7 +131,6 @@ void Kitchen::workOnPizza(std::string pathname, int shmid)
             clocke++;
         str = (char*) shmat(shmid, (void*)0, 0);
         if (strcmp(str, "fini") != 0) {
-            // camzer = clock();
             lock_clock = 0;
             clocke = 0;
             std::string tmp(str);
@@ -147,10 +145,6 @@ void Kitchen::workOnPizza(std::string pathname, int shmid)
             lock_clock = 1;
             if (clocke == 5)
                 printf("je me detruit boom\n");
-            // if (((clock() - (float)camzer) / CLOCKS_PER_SEC) > 5) {
-            //     printf("je me detruit boom");
-            //     camzer = clock();
-            // }
             std::cout << "j'attend" << std::endl;
         }
         shmdt(str);
