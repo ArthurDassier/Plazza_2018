@@ -47,10 +47,11 @@ void Kitchen::setName(int name)
     _name = name;
 }
 
-std::string Kitchen::takePizzas(std::string command)
+std::string Kitchen::takePizzas(std::string pathname, std::string command)
 {
     std::vector<PizzaType> pizzas_to_do;
     std::vector<std::string> pizzas_left;
+    std::fstream file(pathname, std::fstream::out | std::fstream::in);
     std::string pizza;
     std::string final_command;
 
@@ -70,6 +71,8 @@ std::string Kitchen::takePizzas(std::string command)
                 _gruyere -= 1;
                 _ham -= 1;
                 _mushrooms -= 1;
+                file << "Regina en preparation" << std::endl;
+                file << "Regina en preparation" << std::endl;
             } else {
                 pizzas_left.push_back(std::to_string(it));
                 pizzas_left.back() += '\n';
@@ -79,6 +82,8 @@ std::string Kitchen::takePizzas(std::string command)
                 _doe -= 1;
                 _tomato -= 1;
                 _gruyere -= 1;
+                std::cout << "Margarita en preparation" << std::endl;
+                file << "Margarita en preparation" << std::endl;
             } else {
                 pizzas_left.push_back(std::to_string(it));
                 pizzas_left.back() += '\n';
@@ -89,6 +94,8 @@ std::string Kitchen::takePizzas(std::string command)
                 _tomato -= 1;
                 _gruyere -= 1;
                 _steak -= 1;
+                std::cout << "Americana en preparation" << std::endl;
+                file << "Americana en preparation" << std::endl;
             } else {
                 pizzas_left.push_back(std::to_string(it));
                 pizzas_left.back() += '\n';
@@ -100,6 +107,8 @@ std::string Kitchen::takePizzas(std::string command)
                 _eggplant -= 1;
                 _goat_cheese -= 1;
                 _chief_love -= 1;
+                std::cout << "Fantasia en preparation" << std::endl;
+                file << "Fantasia en preparation" << std::endl;
             } else {
                 pizzas_left.push_back(std::to_string(it));
                 pizzas_left.back() += '\n';
@@ -148,7 +157,7 @@ void Kitchen::workOnPizza(std::string pathname, int shmid)
                 clocke = 0;
                 std::string tmp(str);
                 std::string other;
-                other = takePizzas(tmp);
+                other = takePizzas(pathname, tmp);
                 if (other.size() == 0) {
                     sprintf(str, "%s", "end");
                 } else {
