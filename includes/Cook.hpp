@@ -30,6 +30,8 @@ class Cook
         void manageCook(int kitchen, PizzaType pizza);
 
     private:
+        pthread_t _thread1;
+        pthread_t _thread2;
         int _name;
         bool _t1Occuped;
         bool _t2Occuped;

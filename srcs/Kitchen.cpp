@@ -81,6 +81,7 @@ std::string Kitchen::takePizzas(std::string command)
                 _tomato -= 1;
                 _gruyere -= 1;
             } else {
+                printf("je la fais pas\n");
                 pizzas_left.push_back(std::to_string(it));
                 pizzas_left.back() += '\n';
             }
@@ -112,8 +113,10 @@ std::string Kitchen::takePizzas(std::string command)
     }
     for (std::string &it : pizzas_left)
         final_command += it;
-    final_command.pop_back();
-    final_command.pop_back();
+    if (final_command.find_last_of('0') != std::string::npos) {
+        final_command.pop_back();
+        final_command.pop_back();
+    }
     std::cout << "CA CASSE LES COUILLES " << final_command;
     return (final_command);
 }
@@ -165,10 +168,12 @@ int Kitchen::sendToCook(PizzaType pizza)
     std::list<Cook>::iterator it = _cookList.begin();
 
     // printf("dans sendtocook\n");
-    for (; it != _cookList.end(); it++)
+/*    for (; it != _cookList.end(); it++)
         if (it->allisOccuped() == false) {
             it->manageCook(_name, pizza);
+            printf(":/\n");
             return (0);
         }
-    return (84);
+    return (84);*/
+    return (0);
 }
