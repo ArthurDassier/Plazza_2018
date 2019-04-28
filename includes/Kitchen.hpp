@@ -24,7 +24,7 @@ class Kitchen
         int getName();
         void setName(int name);
         void workOnPizza(std::string pathname, int shmid);
-        std::string takePizzas(std::string);
+        std::string takePizzas(std::string, std::string);
         int sendToCook(PizzaType);
         void restock();
 

@@ -78,7 +78,7 @@ void Cook::manageCook(int kitchen, PizzaType pizza)
         return;
     }
     if (t1isOccuped() == true && t2isOccuped() == true) {
-            _allOcupped = true;
-            return;
+        _allOcupped = true;
+        return;
     }
 }
