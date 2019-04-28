@@ -91,7 +91,7 @@ void Reception::createKitchen(std::string &command)
     int shmid = shmget(it->key,1024,0666|IPC_CREAT);
     str = (char*) shmat(shmid,(void*)0,0);
     if (strcmp(str, "fini") == 0) {
-        printf("ya plus de pizza\n");
+        printf("y'a plus de pizzas\n");
         command.clear();
     } else {
         std::string tmp(str);

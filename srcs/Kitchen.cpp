@@ -75,13 +75,11 @@ std::string Kitchen::takePizzas(std::string command)
                 pizzas_left.back() += '\n';
             }
         } else if (it == Margarita && _doe > 0 && _tomato > 0 && _gruyere > 0) {
-            printf("dans la Margarita\n");
             if (sendToCook(it) == 0) {
                 _doe -= 1;
                 _tomato -= 1;
                 _gruyere -= 1;
             } else {
-                printf("je la fais pas\n");
                 pizzas_left.push_back(std::to_string(it));
                 pizzas_left.back() += '\n';
             }
@@ -117,7 +115,6 @@ std::string Kitchen::takePizzas(std::string command)
         final_command.pop_back();
         final_command.pop_back();
     }
-    std::cout << "CA CASSE LES COUILLES " << final_command;
     return (final_command);
 }
 
@@ -158,10 +155,6 @@ void Kitchen::workOnPizza(std::string pathname, int shmid)
                     sprintf(str, "%s", other.c_str());
                 }
             }
-                // printf("ce qu'il reste : %s", tmp.c_str());
-            // printf("CHUI LA KITCHEN%c : %s\n",
-            // pathname[strlen((char *)pathname.c_str()) - 1], str);
-            // file << str;
         } else {
             lock_clock = 1;
             if (clocke == 5) {
@@ -180,7 +173,6 @@ int Kitchen::sendToCook(PizzaType pizza)
 {
     std::list<Cook>::iterator it = _cookList.begin();
 
-    // printf("dans sendtocook\n");
     for (; it != _cookList.end(); it++)
         if (it->allisOccuped() == false) {
             it->manageCook(_name, pizza);

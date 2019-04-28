@@ -21,7 +21,6 @@ class Kitchen
         Kitchen(int name, int nb_cooks, int timeRestock, double timePrepare);
         ~Kitchen();
 
-
         int getName();
         void setName(int name);
         void workOnPizza(std::string pathname, int shmid);

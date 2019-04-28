@@ -80,11 +80,5 @@ void Cook::manageCook(int kitchen, PizzaType pizza)
     if (t1isOccuped() == true && t2isOccuped() == true) {
             _allOcupped = true;
             return;
-            // pthread_join(_thread1, NULL);
-            // _t1Occuped = false;
-            // pthread_join(_thread2, NULL);
-            // _t2Occuped = false;
-            // _allOcupped = false;
-            // printf("jai tous fini\n");
     }
 }

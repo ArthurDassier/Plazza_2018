@@ -5,8 +5,7 @@
 ** Parser.hpp
 */
 
-#ifndef PARSER_HPP_
-    #define PARSER_HPP_
+#pragma once
 
 #include <array>
 #include <memory>
@@ -60,5 +59,3 @@ class Parser
         PizzaSize _size;
         int _nb;
 };
-
-#endif /* !PARSER_HPP_ */
