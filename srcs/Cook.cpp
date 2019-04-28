@@ -48,7 +48,10 @@ static void *createPizza(void *cc)
 {
     struct createPizza_inf *info = (struct createPizza_inf *)cc;
 
+    mutex.lock();
+    sleep(5);
     std::cout << "~je suis " << info->pizza << std::endl;
+    mutex.unlock();
     return (cc);
     // mutex.lock();
     // sleep(info->timeWait/1000);
@@ -68,20 +71,32 @@ void Cook::manageCook(int kitchen, PizzaType pizza)
     if (t1isOccuped() == false) {
         _t1Occuped = true;
         pthread_create(&thread1, NULL, &createPizza, &cc);
-        if (t1isOccuped() == true && t2isOccuped() == true) {
-            _allOcupped = true;
-            pthread_join(thread1, NULL);
-            _t1Occuped = false;
-            pthread_join(thread2, NULL);
-            _t2Occuped = false;
-            _allOcupped = false;
-            printf("jai tous fini\n");
-        }
+        // if (t1isOccuped() == true && t2isOccuped() == true) {
+        //     _allOcupped = true;
+        //     pthread_join(thread1, NULL);
+        //     _t1Occuped = false;
+        //     pthread_join(thread2, NULL);
+        //     _t2Occuped = false;
+        //     _allOcupped = false;
+        //     printf("jai tous fini\n");
+        // }
+        return;
     }
     else if (t2isOccuped() == false) {
         _t2Occuped = true;
         pthread_create(&thread2, NULL, &createPizza, &cc);
-        if (t1isOccuped() == true && t2isOccuped() == true) {
+        // if (t1isOccuped() == true && t2isOccuped() == true) {
+        //     _allOcupped = true;
+        //     pthread_join(thread1, NULL);
+        //     _t1Occuped = false;
+        //     pthread_join(thread2, NULL);
+        //     _t2Occuped = false;
+        //     _allOcupped = false;
+        //     printf("jai tous fini\n");
+        // }
+        return;
+    }
+    if (t1isOccuped() == true && t2isOccuped() == true) {
             _allOcupped = true;
             pthread_join(thread1, NULL);
             _t1Occuped = false;
@@ -89,6 +104,5 @@ void Cook::manageCook(int kitchen, PizzaType pizza)
             _t2Occuped = false;
             _allOcupped = false;
             printf("jai tous fini\n");
-        }
     }
 }

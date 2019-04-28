@@ -91,14 +91,19 @@ void Reception::createKitchen(std::string &command)
         sprintf(str, "%s\n", command.c_str());
         shmdt(str);
     }
-    sleep(4);
+    sleep(2);
     int shmid = shmget(it->key,1024,0666|IPC_CREAT);
     str = (char*) shmat(shmid,(void*)0,0);
     if (strcmp(str, "fini") == 0) {
         printf("ya plus de pizza\n");
         command.clear();
-    } else
-        printf("coucou");
+    } else {
+        printf("c ce quil reste wallah %s", str);
+        std::string tmp(str);
+        command = tmp;
+        std::cout << "coucou " << command;
+    }
+        // printf("coucou");
         //command = str;
     shmdt(str);
 }
