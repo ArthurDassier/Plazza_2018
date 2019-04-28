@@ -63,6 +63,15 @@ std::vector<std::string> Parser::carveOrder(std::string str, char c)
     return order;
 }
 
+bool Parser::iequals(const std::string &a, const std::string &b)
+{
+    return std::equal(a.begin(), a.end(),
+                      b.begin(), b.end(),
+                      [](char a, char b) {
+                          return tolower(a) == tolower(b);
+                      });
+}
+
 void Parser::cleanOrder(std::unique_ptr<std::vector<std::string>> &order)
 {
     std::vector<std::string> tmp;
@@ -92,7 +101,7 @@ bool Parser::checkPizza(std::string pizza)
 {
     auto it = std::find_if(std::begin(_pizzas), std::end(_pizzas),
                            [&](std::pair<PizzaType, std::string> i) {
-                               return (pizza.compare(i.second));
+                               return (iequals(pizza, i.second));
                            });
     if (it == std::end(_pizzas))
         return (false);
@@ -124,7 +133,7 @@ void Parser::setPizzaSize(std::string size)
 {
     auto it = std::find_if(std::begin(_sizes), std::end(_sizes),
                            [&](std::pair<PizzaSize, std::string> i) {
-                               return (size.compare(i.second));
+                               return (iequals(size, i.second));
                            });
     if (it != std::end(_sizes))
         _size = it->first;

@@ -38,6 +38,8 @@ class Parser
         void setPizzaNumber(std::string);
         int getPizzaNumber() const noexcept;
 
+        bool iequals(const std::string &, const std::string &);
+
       private:
         std::array<std::pair<PizzaType, std::string>, 4> _pizzas
         {
