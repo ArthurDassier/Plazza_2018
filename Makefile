@@ -7,7 +7,7 @@
 
 NAME		=	plazza
 
-CXX			=	g++ -std=c++17 -g3 -pthread
+CXX			=	g++ -std=c++11 -g3 -pthread
 
 TEST_NAME	=	unit_test_plazza
 
@@ -22,7 +22,7 @@ EXE			= 	$(SRC_DIR)/main.cpp				\
 
 OBJS		=	$(EXE:.cpp=.o)
 
-UT 			= 	$(UT_DIR)/tests_Kitchen.cpp		\
+UT 			= 	$(UT_DIR)/tests_Reception.cpp		\
 
 UT2			=	$(SRC_DIR)/Cook.cpp				\
 				$(SRC_DIR)/Kitchen.cpp			\
@@ -40,7 +40,7 @@ CXXFLAGS	+=	-I ./includes
 
 INCLUDE		=	-I ./includes
 
-LD_FLAGS	=	-lcriterion -coverage
+LD_FLAGS	=	-lcriterion -coverage -pthread
 
 all:		$(NAME)
 

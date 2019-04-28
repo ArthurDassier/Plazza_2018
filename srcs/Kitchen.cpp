@@ -150,7 +150,7 @@ void Kitchen::workOnPizza(std::string pathname, int shmid)
         shmdt(str);
     }
     file.close();
-    shmctl(shmid,IPC_RMID,NULL);
+    shmctl(shmid, IPC_RMID, NULL);
 }
 
 int Kitchen::sendToCook(PizzaType pizza)
