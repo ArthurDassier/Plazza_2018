@@ -10,13 +10,8 @@
 #include "Parser.hpp"
 #include "PlazzaError.hpp"
 
-Parser::Parser():
-    _error(false)
-{}
-
-bool Parser::parseOrder()
+void Parser::parseOrder()
 {
-    setError(false);
     std::string order;
     std::getline(std::cin, order);
     std::string ord;
@@ -27,8 +22,7 @@ bool Parser::parseOrder()
         cleanOrder(orderVector);
         if (orderVector->size() < 3)
             throw(ParserError("Too few arguments."));
-        for (auto &it_c : fillArray(*orderVector))
-        {
+        for (auto &it_c : fillArray(*orderVector)) {
             switch (i) {
                 case 0:
                     setPizzaType(it_c);
@@ -50,7 +44,6 @@ bool Parser::parseOrder()
         ord.clear();
         i = 0;
     }
-    return (!getError() ? true : false);
 }
 
 std::vector<std::string> Parser::carveOrder(std::string str, char c)
@@ -175,14 +168,4 @@ void Parser::setPizzaNumber(std::string nb)
 int Parser::getPizzaNumber() const noexcept
 {
     return _nb;
-}
-
-void Parser::setError(bool error)
-{
-    _error = error;
-}
-
-bool Parser::getError() const noexcept
-{
-    return _error;
 }
