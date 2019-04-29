@@ -25,10 +25,13 @@ EXE			= 	$(SRC_DIR)/main.cpp				\
 OBJS		=	$(EXE:.cpp=.o)
 
 UT 			= 	$(UT_DIR)/tests_Reception.cpp	\
+				$(UT_DIR)/tests_Parser.cpp
 
 UT2			=	$(SRC_DIR)/Cook.cpp				\
 				$(SRC_DIR)/Kitchen.cpp			\
 				$(SRC_DIR)/Reception.cpp		\
+				$(SRC_DIR)/Parser.cpp			\
+				$(SRC_DIR)/PlazzaError.cpp
 
 OBJS_UT		=	$(UT:.cpp=.o)
 
@@ -51,7 +54,7 @@ $(NAME): $(OBJS)
 
 
 tests_run:	$(OBJS) 
-			g++ -std=c++11 $(INCLUDE) -o UT $(UT) $(UT2) $(LD_FLAGS)
+			g++ -std=c++17 $(INCLUDE) -o UT $(UT) $(UT2) $(LD_FLAGS)
 			./UT
 
 clean:
