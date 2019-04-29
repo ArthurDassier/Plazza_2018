@@ -9,6 +9,7 @@
 
 #include "Plazza.hpp"
 #include "Kitchen.hpp"
+#include "PlazzaError.hpp"
 
 class Reception 
 {

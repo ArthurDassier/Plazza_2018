@@ -143,6 +143,8 @@ void Kitchen::workOnPizza(std::string pathname, int shmid)
         if (clocke == (_timeRestock / 1000))
             restock();
         str = (char*) shmat(shmid, (void*)0, 0);
+        if (str == (void *)-1)
+            throw(SharedMemoryError("shmat error."));
         if (strcmp(str, "end") != 0) {
             if (_doe == 0 || _ham == 0 || _steak == 0 || _goat_cheese == 0 ||
                 _tomato == 0 || _eggplant == 0 || _gruyere == 0 || _mushrooms == 0 ||
@@ -160,11 +162,10 @@ void Kitchen::workOnPizza(std::string pathname, int shmid)
                 std::string tmp(str);
                 std::string other;
                 other = takePizzas(pathname, tmp);
-                if (other.size() == 0) {
+                if (other.size() == 0)
                     sprintf(str, "%s", "end");
-                } else {
+                else
                     sprintf(str, "%s", other.c_str());
-                }
             }
         } else {
             lock_clock = 1;
@@ -184,11 +185,15 @@ int Kitchen::sendToCook(PizzaType pizza)
 {
     std::list<Cook>::iterator it = _cookList.begin();
 
-    for (; it != _cookList.end(); it++)
-        if (it->allisOccuped() == false) {
-            it->manageCook(_name, pizza);
-            return (0);
-        }
+    try {
+        for (; it != _cookList.end(); it++)
+            if (it->allisOccuped() == false) {
+                it->manageCook(_name, pizza);
+                return (0);
+            }
+    } catch (PlazzaError const &e) {
+        throw(e);
+    }
     return (84);
 }
 
