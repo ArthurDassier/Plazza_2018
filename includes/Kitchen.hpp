@@ -18,7 +18,7 @@
 class Kitchen
 {
     public:
-        Kitchen(int name, int nb_cooks, int timeRestock, double timePrepare);
+        Kitchen(int name, int nb_cooks, int timeRestock, int timePrepare);
         ~Kitchen();
 
         int getName();
