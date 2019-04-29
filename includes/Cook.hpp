@@ -15,13 +15,13 @@ struct createPizza_inf
     int name;
     int kitchen;
     PizzaType pizza;
-    double timeWait;
+    int timeWait;
 };
 
 class Cook 
 {
     public:
-        Cook(int name, double _timeWait);
+        Cook(int name, int _timeWait);
         ~Cook();
 
         int getName() const;
@@ -38,5 +38,5 @@ class Cook
         bool _t2Occuped;
         bool _allOcupped;
         int _nbCurrPizza;
-        double _timeWait;
+        int _timeWait;
 };
