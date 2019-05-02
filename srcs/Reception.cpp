@@ -42,8 +42,7 @@ void Reception::goToKitchens(std::string command)
     char *str;
     std::list<Kitchen_inf>::iterator it;
 
-    if (_list_kitchen.size() == 0)
-        createKitchen(command);
+    createKitchen(command);
     while (command.empty() == false) {
         for (it = _list_kitchen.begin(); it != _list_kitchen.end(); it++) {
             try {
