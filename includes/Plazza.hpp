@@ -19,6 +19,8 @@
 #include <sys/wait.h>
 #include <mutex>
 
+#define ERROR 84
+
 enum PizzaType
 {
     Regina = 1,

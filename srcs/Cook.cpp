@@ -57,7 +57,7 @@ static void *createPizza(void *cc)
     // mutex.lock();
     // sleep(info->timeWait/1000);
     // std::cout << "le cook" << info->name << " de kitchen" << info->kitchen 
-    // << " a fini " << info->pizza << std::endl;
+    // << " a end " << info->pizza << std::endl;
     // mutex.unlock();
     // return (cc);
 }
@@ -78,7 +78,7 @@ void Cook::manageCook(int kitchen, PizzaType pizza)
         return;
     }
     if (t1isOccuped() == true && t2isOccuped() == true) {
-            _allOcupped = true;
-            return;
+        _allOcupped = true;
+        return;
     }
 }

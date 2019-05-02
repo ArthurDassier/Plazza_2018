@@ -8,14 +8,10 @@
 #include <iostream>
 #include <algorithm>
 #include "Parser.hpp"
+#include "PlazzaError.hpp"
 
-Parser::Parser():
-    _error(false)
-{}
-
-bool Parser::parseOrder()
+void Parser::parseOrder()
 {
-    setError(false);
     std::string order;
     std::getline(std::cin, order);
     std::string ord;
@@ -25,7 +21,7 @@ bool Parser::parseOrder()
         auto orderVector = std::make_unique<std::vector<std::string>>(carveOrder(it, ' '));
         cleanOrder(orderVector);
         if (orderVector->size() < 3)
-            return (false);
+            throw(ParserError("Too few arguments."));
         for (auto &it_c : fillArray(*orderVector)) {
             switch (i) {
                 case 0:
@@ -48,7 +44,6 @@ bool Parser::parseOrder()
         ord.clear();
         i = 0;
     }
-    return (!getError() ? true : false);
 }
 
 std::vector<std::string> Parser::carveOrder(std::string str, char c)
@@ -115,15 +110,17 @@ std::string Parser::getOrder() const noexcept
 
 void Parser::setPizzaType(std::string type)
 {
-    auto it = std::find_if(std::begin(_pizzas), std::end(_pizzas),
-                           [&](std::pair<PizzaType, std::string> i) {
-                               return (iequals(type, i.second));
-                           });
-    if (it != std::end(_pizzas))
-        _type = it->first;
-    else if (!getError()) {
-        setError(true);
-        std::cerr << "Error: Invalid type of pizza." << std::endl;
+    try {
+        auto it = std::find_if(std::begin(_pizzas), std::end(_pizzas),
+                            [&](std::pair<PizzaType, std::string> i) {
+                                return (iequals(type, i.second));
+                            });
+        if (it != std::end(_pizzas))
+            _type = it->first;
+        else
+            throw(ParserError("Invalid type of pizza."));
+    } catch (PlazzaError const &e) {
+        throw(e);
     }
 }
 
@@ -134,15 +131,17 @@ PizzaType Parser::getPizzaType() const noexcept
 
 void Parser::setPizzaSize(std::string size)
 {
-    auto it = std::find_if(std::begin(_sizes), std::end(_sizes),
-                           [&](std::pair<PizzaSize, std::string> i) {
-                               return (iequals(size, i.second));
-                           });
-    if (it != std::end(_sizes))
-        _size = it->first;
-    else if (!getError()) {
-        std::cerr << "Error: Invalid size of pizza." << std::endl;
-        setError(true);
+    try {
+        auto it = std::find_if(std::begin(_sizes), std::end(_sizes),
+                            [&](std::pair<PizzaSize, std::string> i) {
+                                return (iequals(size, i.second));
+                            });
+        if (it != std::end(_sizes))
+            _size = it->first;
+        else
+            throw(ParserError("Invalid size of pizza."));
+    } catch (PlazzaError const &e) {
+        throw(e);
     }
 }
 
@@ -153,29 +152,20 @@ PizzaSize Parser::getPizzaSize() const noexcept
 
 void Parser::setPizzaNumber(std::string nb)
 {
-    if (nb.front() == 'x')
-        nb.erase(nb.begin(), nb.begin() + 1);
     try {
-        _nb = std::stoi(nb);
-    } catch (std::invalid_argument &e){
-        if (!getError()) {
-            std::cerr << e.what() << " error: Invalid number of pizza." << std::endl;
-            setError(true);
+        if (nb.front() == 'x')
+            nb.erase(nb.begin(), nb.begin() + 1);
+        try {
+            _nb = std::stoi(nb);
+        } catch (std::invalid_argument &e){
+            throw(ParserError("Invalid number of pizza."));
         }
+    } catch (PlazzaError const &e) {
+        throw(e);
     }
 }
 
 int Parser::getPizzaNumber() const noexcept
 {
     return _nb;
-}
-
-void Parser::setError(bool error)
-{
-    _error = error;
-}
-
-bool Parser::getError() const noexcept
-{
-    return _error;
 }

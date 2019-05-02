@@ -16,10 +16,10 @@
 class Parser
 {
     public:
-        Parser();
+        Parser() = default;
         ~Parser() = default;
 
-        bool parseOrder();
+        void parseOrder();
 
         std::vector<std::string> carveOrder(std::string, char);
         void cleanOrder(std::unique_ptr<std::vector<std::string>> &);
