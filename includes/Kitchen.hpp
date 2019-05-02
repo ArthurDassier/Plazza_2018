@@ -11,30 +11,33 @@
 #include <unistd.h>
 #include <fstream>
 #include <cstring>
-#include <pthread.h>
+#include <tuple>
+#include <functional>
 #include "Plazza.hpp"
 #include "Cook.hpp"
+#include "PlazzaError.hpp"
 
 class Kitchen
 {
     public:
-        Kitchen(int name, int nb_cooks, int timeRestock, double timePrepare);
+        Kitchen(int, int, int, int);
         ~Kitchen();
 
+        // Members
         int getName();
-        void setName(int name);
-        void workOnPizza(std::string pathname, int shmid);
+        void setName(int);
+        void workOnPizza(std::string, int);
         std::string takePizzas(std::string, std::string);
         int sendToCook(PizzaType);
         void restock();
+        void manageCook(int, PizzaType, std::tuple<Cook, std::thread, std::thread> &it);
 
     private:
         int _name;
         std::string _pathname;
         std::vector<PizzaType> _PizzasToPrepare;
-        std::list<Cook> _cookList;
+        std::list<std::tuple<Cook, std::thread, std::thread>> _cookList;
         std::mutex mutex;
-        std::list<pthread_t> _threadList;
         int _doe;
         int _ham;
         int _steak;
@@ -45,5 +48,5 @@ class Kitchen
         int _mushrooms;
         int _chief_love;
         int _timeRestock;
-        double _timePrepare;
+        int _timePrepare;
 };

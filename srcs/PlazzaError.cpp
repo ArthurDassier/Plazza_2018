@@ -32,3 +32,13 @@ ParserError::ParserError(std::string const &message) :
     PlazzaError::PlazzaError(message, "ParserError")
 {
 }
+
+SharedMemoryError::SharedMemoryError(std::string const &message) : 
+    PlazzaError::PlazzaError(message, "SharedMemoryError")
+{
+}
+
+ThreadError::ThreadError(std::string const &message) :
+    PlazzaError::PlazzaError(message, "ThreadError")
+{
+}

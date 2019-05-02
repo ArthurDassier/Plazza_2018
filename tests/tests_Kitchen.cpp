@@ -10,42 +10,32 @@
 #include <criterion/redirect.h>
 #include "Kitchen.hpp"
 
-Test(tests_kitchen, test_takePizzas_1)
+Test(tests_kitchen, getName)
 {
     Kitchen test(1, 1, 1, 1);
 
-    cr_assert_eq(test.takePizzas("1\n1\n"), "");
-    cr_assert_eq(test.takePizzas("1\n1\n"), "");
-    cr_assert_eq(test.takePizzas("1\n1\n"), "1\n");
-    cr_assert_eq(test.takePizzas("1\n1\n"), "1\n1\n");
+    cr_assert_eq(test.getName(), 1);
 }
 
-Test(tests_kitchen, test_takePizzas_2)
+Test(tests_kitchen, getName2)
 {
     Kitchen test(1, 1, 1, 1);
 
-    cr_assert_eq(test.takePizzas("2\n2\n"), "");
-    cr_assert_eq(test.takePizzas("2\n2\n"), "");
-    cr_assert_eq(test.takePizzas("2\n2\n"), "2\n");
-    cr_assert_eq(test.takePizzas("2\n2\n"), "2\n2\n");
+    cr_assert_neq(test.getName(), 2);
 }
 
-Test(tests_kitchen, test_takePizzas_3)
+Test(tests_kitchen, setName)
 {
     Kitchen test(1, 1, 1, 1);
 
-    cr_assert_eq(test.takePizzas("3\n3\n"), "");
-    cr_assert_eq(test.takePizzas("3\n3\n"), "");
-    cr_assert_eq(test.takePizzas("3\n3\n"), "3\n");
-    cr_assert_eq(test.takePizzas("3\n3\n"), "3\n3\n");
+    test.setName(2);
+    cr_assert_eq(test.getName(), 2);
 }
 
-Test(tests_kitchen, test_takePizzas_4)
+Test(tests_kitchen, setName2)
 {
-    Kitchen test(1, 1, 1, 1);
+    Kitchen test(2, 1, 1, 1);
 
-    cr_assert_eq(test.takePizzas("4\n4\n"), "");
-    cr_assert_eq(test.takePizzas("4\n4\n"), "");
-    cr_assert_eq(test.takePizzas("4\n4\n"), "4\n");
-    cr_assert_eq(test.takePizzas("4\n4\n"), "4\n4\n");
+    test.setName(1);
+    cr_assert_neq(test.getName(), 2);
 }

@@ -20,12 +20,16 @@ EXE			= 	$(SRC_DIR)/main.cpp				\
 				$(SRC_DIR)/Kitchen.cpp			\
 				$(SRC_DIR)/Reception.cpp		\
 				$(SRC_DIR)/Parser.cpp			\
-				$(SRC_DIR)/PlazzaError.cpp
+				$(SRC_DIR)/PlazzaError.cpp		\
+				$(SRC_DIR)/EncapsThread.cpp		\
+				$(SRC_DIR)/SharedMemory.cpp
 
 OBJS		=	$(EXE:.cpp=.o)
 
 UT 			= 	$(UT_DIR)/tests_Reception.cpp	\
-				$(UT_DIR)/tests_Parser.cpp
+				$(UT_DIR)/tests_Parser.cpp		\
+				$(UT_DIR)/tests_Cook.cpp		\
+				$(UT_DIR)/tests_Kitchen.cpp		\
 
 UT2			=	$(SRC_DIR)/Cook.cpp				\
 				$(SRC_DIR)/Kitchen.cpp			\

@@ -9,6 +9,8 @@
 
 #include "Plazza.hpp"
 #include "Kitchen.hpp"
+#include "PlazzaError.hpp"
+#include "SharedMemory.hpp"
 
 class Reception 
 {
@@ -30,4 +32,5 @@ class Reception
         std::string _command;
         std::list<Kitchen_inf> _list_kitchen;
         std::list<std::string> _list_key;
+        SharedMemory _SM;
 };

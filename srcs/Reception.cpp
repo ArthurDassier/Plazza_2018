@@ -42,19 +42,24 @@ void Reception::goToKitchens(std::string command)
     char *str;
     std::list<Kitchen_inf>::iterator it;
 
-    if (_list_kitchen.size() == 0)
-        createKitchen(command);
+    createKitchen(command);
     while (command.empty() == false) {
-        it = _list_kitchen.begin();
-        for (; it != _list_kitchen.end(); it++) {
-            str = (char*)shmat(it->shmid,(void*)0,0);
-            if (strcmp(str, "end") == 0) {
-                command.clear();
-                return;
-            } else
-                command = str;
-            sprintf(str, "%s", command.c_str());
-            shmdt(str);
+        for (it = _list_kitchen.begin(); it != _list_kitchen.end(); it++) {
+            try {
+                str = _SM.getDataById(it->shmid);
+                // str = (char *)shmat(it->shmid, (void *)0, 0);
+                // if (str == (void *)-1)
+                //     throw(SharedMemoryError("shmat error."));
+                if (strcmp(str, "end") == 0) {
+                    command.clear();
+                    return;
+                } else
+                    command = str;
+                sprintf(str, "%s", command.c_str());
+                shmdt(str);
+            } catch (PlazzaError const &e) {
+                throw(e);
+            }
         }
         createKitchen(command);
     }
@@ -69,27 +74,33 @@ void Reception::createKitchen(std::string &command)
     addKitchen();
     it = _list_kitchen.end();
     it--;
-    std::cout << it->pathname.c_str() << std::endl;
-    std::cout << it->name << std::endl;
+    std::cout << "Kitchen " << it->name << " created" << std::endl;
     if ((child = fork()) == 0) {
         Kitchen new_kitchen(it->name, _nb_cook, _reset_food, _time);
         new_kitchen.workOnPizza(it->pathname, it->shmid);
     } else {
-        int shmid = shmget(it->key,1024,0666|IPC_CREAT);
-        str = (char*) shmat(shmid,(void*)0,0);
-        sprintf(str, "%s\n", command.c_str());
-        shmdt(str);
+        _SM.writeData(it->key, 1024, IPC_CREAT, command);
+        // int shmid = shmget(it->key, 1024, 0666 | IPC_CREAT);
+        // str = (char *)shmat(shmid, (void *)0, 0);
+        // if (str == (void *)-1)
+        //     throw(SharedMemoryError("shmat() error."));
+        // sprintf(str, "%s\n", command.c_str());
+        // shmdt(str);
     }
     sleep(4);
-    int shmid = shmget(it->key,1024,0666|IPC_CREAT);
-    str = (char*) shmat(shmid,(void*)0,0);
+    str = _SM.getData(it->key, 1024, 0666);
+    // int shmid = shmget(it->key, 1024, 0666 | IPC_CREAT);
+    // str = (char *)shmat(shmid, (void *)0, 0);
+    // if (str == (void *)-1)
+    //     throw(SharedMemoryError("shmat() error."));
     if (strcmp(str, "end") == 0)
         command.clear();
     else {
         std::string tmp(str);
         command = tmp;
     }
-    shmdt(str);
+    _SM.detachFrom(str);
+    // shmdt(str);
 }
 
 int Reception::addKitchen()
@@ -100,17 +111,20 @@ int Reception::addKitchen()
     int pos;
     std::string last_kitchen;
 
-    if (_list_kitchen.size() == 0)
-        pos = 1;
-    else
-        pos = _list_kitchen.size() + 1;
+    pos = (_list_kitchen.size() == 0) ? 1 : _list_kitchen.size() + 1;
+    // if (_list_kitchen.size() == 0)
+    //     pos = 1;
+    // else
+    //     pos = _list_kitchen.size() + 1;
     last_kitchen = std::to_string(pos);
     kitchen_name += last_kitchen;
     new_kitchen.name = nb_kitchen;
     new_kitchen.pathname = kitchen_name;
     new_kitchen.use = true;
-    new_kitchen.key = ftok(new_kitchen.pathname.c_str(), 65);
-    new_kitchen.shmid = shmget(new_kitchen.key,1024,0666|IPC_CREAT);
+    new_kitchen.key = _SM.keyGen(new_kitchen.pathname, 65);             //ftok(new_kitchen.pathname.c_str(), 65);
+    new_kitchen.shmid = _SM.shmIdGen(new_kitchen.key, 1024, IPC_CREAT); //shmget(new_kitchen.key, 1024, 0666 | IPC_CREAT);
+    if (new_kitchen.shmid < 0)
+        throw(SharedMemoryError("shmget() error."));
     _list_kitchen.push_back(new_kitchen);
     nb_kitchen++;
     return (pos);

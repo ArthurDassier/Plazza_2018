@@ -9,7 +9,7 @@
 
 std::mutex mutex;
 
-Cook::Cook(int name, double timeWait)
+Cook::Cook(int name, int timeWait)
 {
     _name = name;
     _timeWait = timeWait;
@@ -43,42 +43,25 @@ bool Cook::allisOccuped() const
     return (_allOcupped);
 }
 
-static void *createPizza(void *cc)
+void *Cook::createPizza(void *cc)
 {
-    // struct createPizza_inf *info = (struct createPizza_inf *)cc;
+    int *info = (int *)cc;
     void *ret;
 
-    (void)cc;
     mutex.lock();
-    sleep(5);
-    // std::cout << "~je suis " << info->pizza << std::endl;
+    switch (*info) {
+        case 1: sleep(_timeWait * 2);
+            break;
+        case 2: sleep(_timeWait * 1);
+            break;
+        case 4: sleep(_timeWait * 2);
+            break;
+        case 8: sleep(_timeWait * 4);
+            break;
+        default: sleep(1);
+            break;
+    }
+    std::cout << "Cook finished pizza" << std::endl;
     mutex.unlock();
     return (ret);
-    // mutex.lock();
-    // sleep(info->timeWait/1000);
-    // std::cout << "le cook" << info->name << " de kitchen" << info->kitchen 
-    // << " a end " << info->pizza << std::endl;
-    // mutex.unlock();
-    // return (cc);
-}
-
-void Cook::manageCook(int kitchen, PizzaType pizza)
-{
-    struct createPizza_inf cc = {_name, kitchen, pizza, _timeWait};
-
-    std::cout << "je suis " << pizza << " " << cc.pizza << std::endl;
-    if (t1isOccuped() == false) {
-        _t1Occuped = true;
-        pthread_create(&_thread1, NULL, &createPizza, &cc);
-        return;
-    }
-    else if (t2isOccuped() == false) {
-        _t2Occuped = true;
-        pthread_create(&_thread2, NULL, &createPizza, &cc);
-        return;
-    }
-    if (t1isOccuped() == true && t2isOccuped() == true) {
-        _allOcupped = true;
-        return;
-    }
 }

@@ -37,9 +37,6 @@ class Parser
         void setPizzaNumber(std::string);
         int getPizzaNumber() const noexcept;
 
-        void setError(bool);
-        bool getError() const noexcept;
-
         bool iequals(const std::string &, const std::string &);
 
       private:
