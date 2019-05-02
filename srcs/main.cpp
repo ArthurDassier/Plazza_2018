@@ -22,6 +22,7 @@ static void plazza(char **av)
             parser.parseOrder();
             reception.setLastCommand(parser.getOrder());
             reception.goToKitchens(reception.getLastCommand());
+            reception.setLastCommand("");
         } catch (PlazzaError const &e) {
             std::cerr << e.what() << std::endl;
         }
