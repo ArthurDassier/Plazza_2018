@@ -25,12 +25,14 @@ Kitchen::Kitchen(int name, int nb_cooks, int timeRestock, int timePrepare):
     _timeRestock(timeRestock),
     _timePrepare(timePrepare)
 {
-    for (int i = 0; i < nb_cooks; i++) {
-        Cook current_cook = Cook(i, timePrepare);
-        pthread_t thread1;
-        _cookList.push_back(current_cook);
-        _threadList.push_back(thread1);
-    }
+    for (int i = 0; i < nb_cooks; ++i)
+        _cookList.emplace_back(
+            std::make_tuple(
+                Cook(i, timePrepare),
+                std::thread(), 
+                std::thread()
+            )
+        );
 }
 
 Kitchen::~Kitchen()
@@ -183,12 +185,10 @@ void Kitchen::workOnPizza(std::string pathname, int shmid)
 
 int Kitchen::sendToCook(PizzaType pizza)
 {
-    std::list<Cook>::iterator it = _cookList.begin();
-
     try {
-        for (; it != _cookList.end(); it++)
-            if (it->allisOccuped() == false) {
-                it->manageCook(_name, pizza);
+        for (auto &it : _cookList)
+            if (std::get<0>(it).allisOccuped() == false) {
+                manageCook(_name, pizza, it);
                 return (0);
             }
     } catch (PlazzaError const &e) {
@@ -197,15 +197,46 @@ int Kitchen::sendToCook(PizzaType pizza)
     return (84);
 }
 
+void Kitchen::manageCook(int kitchen, PizzaType pizza, std::tuple<Cook, std::thread, std::thread> &it)
+{
+    std::cout << "Cook of Kitchen " << kitchen << " prepare ";
+    switch (pizza) {
+        case 1: std::cout << "Regina" << std::endl;
+            break;
+        case 2: std::cout << "Margarita" << std::endl;
+            break;
+        case 4: std::cout << "Americana" << std::endl;
+            break;
+        case 8: std::cout << "Fantasia" << std::endl;
+            break;
+    }
+    if (std::get<0>(it).t1isOccuped() == false) {
+        std::get<0>(it)._t1Occuped = true;
+        std::get<1>(it) = std::thread(&Cook::createPizza, std::get<0>(it), &pizza);
+    } else if (std::get<0>(it).t2isOccuped() == false) {
+        std::get<0>(it)._t2Occuped = true;
+        std::get<2>(it) = std::thread(&Cook::createPizza, std::get<0>(it), &pizza);
+    }
+    if (std::get<0>(it).t1isOccuped() == true && std::get<0>(it).t2isOccuped() == true) {
+        std::get<0>(it)._allOcupped = true;
+        std::get<1>(it).join();
+        std::get<0>(it)._t1Occuped = false;
+        std::get<2>(it).join();
+        std::get<0>(it)._t1Occuped = false;
+        std::get<0>(it)._allOcupped = false;
+    } else
+        return;
+}
+
 void Kitchen::restock()
 {
-    _doe++;
-    _ham++;
-    _steak++;
-    _goat_cheese++;
-    _tomato++;
-    _eggplant++;
-    _gruyere++;
-    _mushrooms++;
-    _chief_love++;
+    ++_doe;
+    ++_ham;
+    ++_steak;
+    ++_goat_cheese;
+    ++_tomato;
+    ++_eggplant;
+    ++_gruyere;
+    ++_mushrooms;
+    ++_chief_love;
 }
