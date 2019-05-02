@@ -18,6 +18,8 @@ static void plazza(char **av)
     Parser parser;
 
     while (1) {
+        if (std::cin.eof())
+            break;
         try {
             parser.parseOrder();
             reception.setLastCommand(parser.getOrder());
