@@ -144,9 +144,7 @@ void Kitchen::workOnPizza(std::string pathname, int shmid)
             clocke++;
         if (clocke == (_timeRestock / 1000))
             restock();
-        str = (char*) shmat(shmid, (void*)0, 0);
-        if (str == (void *)-1)
-            throw(SharedMemoryError("shmat error."));
+        str = _SM.getDataById(shmid);
         if (strcmp(str, "end") != 0) {
             if (_doe == 0 || _ham == 0 || _steak == 0 || _goat_cheese == 0 ||
                 _tomato == 0 || _eggplant == 0 || _gruyere == 0 || _mushrooms == 0 ||
@@ -177,10 +175,10 @@ void Kitchen::workOnPizza(std::string pathname, int shmid)
             }
             std::cout << "Kitchen " << _name << " is waiting" << std::endl;
         }
-        shmdt(str);
+        _SM.detachFrom(str);
     }
     file.close();
-    shmctl(shmid, IPC_RMID, NULL);
+    _SM.destroy(shmid, IPC_RMID);
 }
 
 int Kitchen::sendToCook(PizzaType pizza)

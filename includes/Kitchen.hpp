@@ -16,6 +16,7 @@
 #include "Plazza.hpp"
 #include "Cook.hpp"
 #include "PlazzaError.hpp"
+#include "SharedMemory.hpp"
 
 class Kitchen
 {
@@ -38,6 +39,7 @@ class Kitchen
         std::vector<PizzaType> _PizzasToPrepare;
         std::list<std::tuple<Cook, std::thread, std::thread>> _cookList;
         std::mutex mutex;
+        SharedMemory _SM;
         int _doe;
         int _ham;
         int _steak;

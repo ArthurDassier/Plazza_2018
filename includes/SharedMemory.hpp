@@ -20,6 +20,8 @@ class SharedMemory {
         char *getDataById(int) const;
         void detachFrom(const void *);
 
+        void destroy(int, int);
+
         key_t keyGen(std::string, int) const;
         int shmIdGen(key_t, size_t, size_t) const;
 };

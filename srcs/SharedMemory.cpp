@@ -8,10 +8,6 @@
 #include "PlazzaError.hpp"
 #include "SharedMemory.hpp"
 
-// SharedMemory::SharedMemory(std::list<Kitchen_inf>::iterator it)
-// {
-// }
-
 void SharedMemory::writeData(key_t key, size_t data_size, size_t process, std::string data)
 {
     char *tmp = getData(key, data_size, process);
@@ -23,10 +19,8 @@ void SharedMemory::writeData(key_t key, size_t data_size, size_t process, std::s
 
 char *SharedMemory::getData(key_t key, size_t data_size, size_t process) const
 {
-    // int shmId = 0;
     char *data = nullptr;
 
-    // shmId = shmIdGen(key, data_size, process);
     data = getDataById(shmIdGen(key, data_size, process));
     return data;
 }
@@ -44,6 +38,12 @@ void SharedMemory::detachFrom(const void *data)
 {
     if (shmdt(data) == -1)
         throw(SharedMemoryError("shmdt() failed."));
+}
+
+void SharedMemory::destroy(int shmId, int process)
+{
+    if (shmctl(shmId, process, NULL) == -1)
+        throw(SharedMemoryError("shmctl() failed."));
 }
 
 key_t SharedMemory::keyGen(std::string pathname, int proj_id) const
