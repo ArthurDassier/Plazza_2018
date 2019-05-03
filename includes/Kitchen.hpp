@@ -30,13 +30,14 @@ class Kitchen
         std::string takePizzas(std::string, std::string);
         int sendToCook(PizzaType);
         void restock();
-        void manageCook(int, PizzaType, std::tuple<Cook, std::thread, std::thread> &it);
+        int manageCook(int, PizzaType, std::tuple<Cook, std::thread, std::thread> &it, int posi);
 
     private:
         int _name;
         std::string _pathname;
         std::vector<PizzaType> _PizzasToPrepare;
         std::list<std::tuple<Cook, std::thread, std::thread>> _cookList;
+        std::list<std::pair<bool, bool>> _listLock;
         std::mutex mutex;
         int _doe;
         int _ham;
