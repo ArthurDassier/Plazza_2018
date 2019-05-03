@@ -43,4 +43,16 @@ class ParserError : public PlazzaError
         ParserError(std::string const &message);
 };
 
+class SharedMemoryError : public PlazzaError
+{
+    public:
+        SharedMemoryError(std::string const &message);
+};
+
+class ThreadError : public PlazzaError
+{
+    public:
+        ThreadError(std::string const &message);
+};
+
 #endif /* !ERROR_HPP_ */
