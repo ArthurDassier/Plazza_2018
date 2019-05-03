@@ -3,6 +3,11 @@ compiler: g++ -std=c++17
 
 addons:
  sonarcloud: true
+ apt:
+  sources:
+    - ubuntu-toolchain-r-test
+  packages:
+    - g++-7
 
 before_install:
   - sudo add-apt-repository ppa:snaipewastaken/ppa -y
