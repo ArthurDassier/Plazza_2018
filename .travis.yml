@@ -27,7 +27,6 @@ jobs:
     if: (NOT type IN (pull_request)) AND (branch = master)
     script:
       - make tests_run
-      - make fclean
       - gcovr -r . -x --object-directory=. > report.xml
       - sonar-scanner -D sonar.host.url=$SONAR_HOST_URL -D sonar.login=$SONAR_TOKEN -X
 
