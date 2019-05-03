@@ -53,19 +53,11 @@ namespace plz
         public:
             Pizza(PizzaType);//, PizzaSize);
 
-            typedef struct s_pizza
-            {
-                PizzaType type;
-                PizzaSize size;
-                t_ingredients ing;
-            } t_pizza;
-
             PizzaType getType() const noexcept;
             std::string getName() const noexcept;
             PizzaSize getSize() const noexcept;
             t_ingredients getIngredients() const noexcept;
             size_t getTime() const noexcept;
-            t_pizza getPizza() const noexcept;
 
             std::array<std::tuple<PizzaType, std::string, t_ingredients, size_t>, 5> _pizzaTypes{
                 std::make_tuple(Regina, "Regina", t_ingredients{1, 1, 1, 1, 0, 0, 0, 1, 0}, 2),
@@ -80,7 +72,6 @@ namespace plz
             PizzaSize _size;
             t_ingredients _ing;
             size_t _time;
-            t_pizza _pizza;
     };
 }
 

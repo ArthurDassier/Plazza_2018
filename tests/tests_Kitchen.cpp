@@ -9,6 +9,7 @@
 #include <criterion/criterion.h>
 #include <criterion/redirect.h>
 #include "Kitchen.hpp"
+#include "Pizza.hpp"
 
 Test(tests_kitchen, getName)
 {

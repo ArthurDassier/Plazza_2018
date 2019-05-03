@@ -61,11 +61,6 @@ bool Ingredients::checkIngredients(t_ingredients stock, t_ingredients pizza)
     return makable;
 }
 
-bool Ingredients::checkIsEmpty(std::shared_ptr<t_ingredients> stock)
-{
-
-}
-
 Pizza::Pizza(PizzaType type/*, PizzaSize size*/) : _type(type)//, _size(size)
 {
     auto it = std::find_if(std::begin(_pizzaTypes), std::end(_pizzaTypes),
@@ -73,8 +68,6 @@ Pizza::Pizza(PizzaType type/*, PizzaSize size*/) : _type(type)//, _size(size)
                                return (type == std::get<0>(i));
                            });
     std::tie(_type, _name, _ing, _time) = *it;
-    // _pizza.size = _size;
-    // _pizza.type = _type;
 }
 
 PizzaType Pizza::getType() const noexcept
@@ -100,9 +93,4 @@ t_ingredients Pizza::getIngredients() const noexcept
 size_t Pizza::getTime() const noexcept
 {
     return _time;
-}
-
-Pizza::t_pizza Pizza::getPizza() const noexcept
-{
-    return _pizza;
 }
