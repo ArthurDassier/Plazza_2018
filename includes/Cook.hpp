@@ -7,36 +7,37 @@
 
 #pragma once
 
+#include <thread>
+#include "EncapsThread.hpp"
 #include "Plazza.hpp"
 #include "PlazzaError.hpp"
 
-struct createPizza_inf
+typedef struct
 {
     int name;
     int kitchen;
     PizzaType pizza;
     int timeWait;
-};
+} createPizza_inf_t;
 
 class Cook 
 {
     public:
-        Cook(int name, int _timeWait);
+        Cook(int, int);
         ~Cook();
 
         int getName() const;
         bool t1isOccuped() const;
         bool t2isOccuped() const;
         bool allisOccuped() const;
-        void manageCook(int kitchen, PizzaType pizza);
-
-    private:
-        pthread_t _thread1;
-        pthread_t _thread2;
-        int _name;
+        void manageCook(int, PizzaType);
+        void *createPizza(void *);
         bool _t1Occuped;
         bool _t2Occuped;
         bool _allOcupped;
+
+    private:
+        int _name;
         int _nbCurrPizza;
         int _timeWait;
 };

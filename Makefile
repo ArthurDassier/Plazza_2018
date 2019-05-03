@@ -20,7 +20,8 @@ EXE			= 	$(SRC_DIR)/main.cpp				\
 				$(SRC_DIR)/Kitchen.cpp			\
 				$(SRC_DIR)/Reception.cpp		\
 				$(SRC_DIR)/Parser.cpp			\
-				$(SRC_DIR)/PlazzaError.cpp
+				$(SRC_DIR)/PlazzaError.cpp		\
+				$(SRC_DIR)/EncapsThread.cpp		\
 
 OBJS		=	$(EXE:.cpp=.o)
 
