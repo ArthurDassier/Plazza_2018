@@ -8,61 +8,53 @@
 #ifndef PIZZA_HPP_
     #define PIZZA_HPP_
 
+#include <memory>
 #include "Plazza.hpp"
 
 namespace plz
 {
     typedef struct s_ingredients
     {
-        bool doe;
-        bool tomato;
-        bool gruyere;
-        bool ham;
-        bool steak;
-        bool eggplant;
-        bool goat_cheese;
-        bool mushrooms;
-        bool chief_love;
+        size_t doe;
+        size_t tomato;
+        size_t gruyere;
+        size_t ham;
+        size_t steak;
+        size_t eggplant;
+        size_t goat_cheese;
+        size_t mushrooms;
+        size_t chief_love;
+
+        friend std::ostream &operator<<(std::ostream &os, s_ingredients const &a)
+        {
+            return os
+                << "chief_love: " << a.chief_love << std::endl
+                << "doe: " << a.doe << std::endl
+                << "eggplant: " << a.eggplant << std::endl
+                << "goat_cheese: " << a.goat_cheese << std::endl
+                << "gruyere: " << a.gruyere << std::endl
+                << "ham: " << a.ham << std::endl
+                << "mushrooms: " << a.mushrooms << std::endl
+                << "steak: " << a.steak << std::endl
+                << "tomato: " << a.tomato << std::endl;
+        }
     } t_ingredients;
 
     class Ingredients
     {
         public:
-            Ingredients(t_ingredients);
+            Ingredients() = default;
 
             t_ingredients getIngredients() const noexcept;
 
-    //         void setDoe();
-    //         size_t getDoe() const noexcept;
-
-    //         void setHam();
-    //         size_t getHam() const noexcept;
-
-    //         void setSteak();
-    //         size_t getSteak() const noexcept;
-
-    //         void setGotCheese();
-    //         size_t getGotCheese() const noexcept;
-
-    //         void setTomato();
-    //         size_t getTomato() const noexcept;
-
-    //         void setEggplant();
-    //         size_t getEggplant() const noexcept;
-
-    //         void setGruyere();
-    //         size_t getGruyere() const noexcept;
-
-    //         void setMushrooms();
-    //         size_t getMushrooms() const noexcept;
-            
-    //         void setChiefLove();
-    //         size_t getChiefLove() const noexcept;
+            void updateIngredients(std::shared_ptr<t_ingredients>, t_ingredients);
+            void restock(std::shared_ptr<t_ingredients>, size_t);
+            bool checkIngredients(t_ingredients, t_ingredients);
     };
     class Pizza
     {
         public:
-            Pizza(PizzaType, PizzaSize);
+            Pizza(PizzaType);//, PizzaSize);
 
             typedef struct s_pizza
             {
@@ -74,6 +66,8 @@ namespace plz
             PizzaType getType() const noexcept;
             std::string getName() const noexcept;
             PizzaSize getSize() const noexcept;
+            t_ingredients getIngredients() const noexcept;
+            size_t getTime() const noexcept;
             t_pizza getPizza() const noexcept;
 
             std::array<std::tuple<PizzaType, std::string, t_ingredients, size_t>, 4> _pizzaTypes

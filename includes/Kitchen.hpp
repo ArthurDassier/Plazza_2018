@@ -17,6 +17,7 @@
 #include "Cook.hpp"
 #include "PlazzaError.hpp"
 #include "SharedMemory.hpp"
+#include "Pizza.hpp"
 
 class Kitchen
 {
@@ -40,15 +41,17 @@ class Kitchen
         std::list<std::tuple<Cook, std::thread, std::thread>> _cookList;
         std::mutex mutex;
         SharedMemory _SM;
-        int _doe;
-        int _ham;
-        int _steak;
-        int _goat_cheese;
-        int _tomato;
-        int _eggplant;
-        int _gruyere;
-        int _mushrooms;
-        int _chief_love;
+        std::shared_ptr<plz::t_ingredients> _stock;
+        plz::Ingredients _ing;
+        // int _doe;
+        // int _ham;
+        // int _steak;
+        // int _goat_cheese;
+        // int _tomato;
+        // int _eggplant;
+        // int _gruyere;
+        // int _mushrooms;
+        // int _chief_love;
         int _timeRestock;
         int _timePrepare;
 };

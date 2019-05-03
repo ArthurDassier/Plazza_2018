@@ -16,7 +16,7 @@ void Parser::parseOrder()
     std::getline(std::cin, order);
     std::string ord;
     size_t i = 0;
-    
+
     setOrder("");
     for (std::string it : carveOrder(order, ';')) {
         auto orderVector = std::make_unique<std::vector<std::string>>(carveOrder(it, ' '));
