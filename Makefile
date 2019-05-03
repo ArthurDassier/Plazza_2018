@@ -7,7 +7,7 @@
 
 NAME		=	plazza
 
-CXX			=	g++ -std=c++17 -g3 -pthread
+CXX			=	g++ -g3 -pthread
 
 TEST_NAME	=	unit_test_plazza
 
@@ -57,7 +57,7 @@ $(NAME): $(OBJS)
 
 
 tests_run:	$(OBJS) 
-			g++ -std=c++17 $(INCLUDE) -o UT $(UT) $(UT2) $(LD_FLAGS)
+			g++ $(INCLUDE) -o UT $(UT) $(UT2) $(LD_FLAGS)
 			./UT
 
 clean:
