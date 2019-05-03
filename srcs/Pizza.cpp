@@ -10,13 +10,6 @@
 
 using namespace plz;
 
-
-// Ingredients::Ingredients(t_ingredients ing)
-// {}
-
-t_ingredients Ingredients::getIngredients() const noexcept
-{}
-
 void Ingredients::updateIngredients(std::shared_ptr<t_ingredients> stock, t_ingredients pizza)
 {
     stock->chief_love -= pizza.chief_love;
@@ -66,6 +59,11 @@ bool Ingredients::checkIngredients(t_ingredients stock, t_ingredients pizza)
     if (pizza.tomato != 0 && stock.tomato == 0)
         makable = false;
     return makable;
+}
+
+bool Ingredients::checkIsEmpty(std::shared_ptr<t_ingredients> stock)
+{
+
 }
 
 Pizza::Pizza(PizzaType type/*, PizzaSize size*/) : _type(type)//, _size(size)

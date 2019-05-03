@@ -45,23 +45,32 @@ bool Cook::allisOccuped() const
 
 void *Cook::createPizza(void *cc)
 {
-    int *info = (int *)cc;
+    PizzaType info = *(reinterpret_cast<PizzaType *>(&cc));
     void *ret;
+    std::string pizza;
 
     mutex.lock();
-    switch (*info) {
-        case 1: sleep(_timeWait * 2);
+    switch (info) {
+        case 1:
+            sleep(_timeWait * 2);
+            pizza = "Regina";
             break;
-        case 2: sleep(_timeWait * 1);
+        case 2:
+            sleep(_timeWait * 1);
+            pizza = "Margarita";
             break;
-        case 4: sleep(_timeWait * 2);
+        case 4: 
+            sleep(_timeWait * 2);
+            pizza = "Americana";
             break;
-        case 8: sleep(_timeWait * 4);
+        case 8:
+            sleep(_timeWait * 4);
+            pizza = "Fantasia";
             break;
-        default: sleep(1);
+        default: return (ret);
             break;
     }
-    std::cout << "Cook finished pizza" << std::endl;
+    std::cout << "Cook finished " << pizza << std::endl;
     mutex.unlock();
     return (ret);
 }

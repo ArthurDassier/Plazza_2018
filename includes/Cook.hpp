@@ -8,7 +8,6 @@
 #pragma once
 
 #include <thread>
-#include "EncapsThread.hpp"
 #include "Plazza.hpp"
 #include "PlazzaError.hpp"
 

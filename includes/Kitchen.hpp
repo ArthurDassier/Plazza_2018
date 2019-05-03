@@ -32,7 +32,7 @@ class Kitchen
         std::string takePizzas(std::string, std::string);
         int sendToCook(PizzaType);
         void restock();
-        void manageCook(int, PizzaType, std::tuple<Cook, std::thread, std::thread> &it);
+        int manageCook(int, PizzaType, std::tuple<Cook, std::thread, std::thread> &it, int posi);
 
     private:
         int _name;
@@ -43,15 +43,7 @@ class Kitchen
         SharedMemory _SM;
         std::shared_ptr<plz::t_ingredients> _stock;
         plz::Ingredients _ing;
-        // int _doe;
-        // int _ham;
-        // int _steak;
-        // int _goat_cheese;
-        // int _tomato;
-        // int _eggplant;
-        // int _gruyere;
-        // int _mushrooms;
-        // int _chief_love;
+        std::list<std::pair<bool, bool>> _listLock;
         int _timeRestock;
         int _timePrepare;
 };

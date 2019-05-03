@@ -18,10 +18,6 @@ Reception::Reception(int time, int nb_cook, int reset_food):
 {
 }
 
-Reception::~Reception()
-{
-}
-
 void Reception::setLastCommand(std::string new_command)
 {
     _command = new_command;
@@ -71,18 +67,14 @@ void Reception::createKitchen(std::string &command)
     addKitchen();
     it = _list_kitchen.end();
     it--;
-    std::cout << "1 ";
     std::cout << "Kitchen " << it->name << " created" << std::endl;
     if ((child = fork()) == 0) {
-        std::cout << "2 " << std::endl;
         Kitchen new_kitchen(it->name, _nb_cook, _reset_food, _time);
         new_kitchen.workOnPizza(it->pathname, it->shmid);
-    } else {
-        std::cout << "3" << std::endl;
+    } else
         _SM.writeData(it->key, 1024, IPC_CREAT, command);
-    }
     sleep(4);
-    str = _SM.getData(it->key, 1024, 0666);
+    str = _SM.getData(it->key, 1024, IPC_CREAT);
     if (strcmp(str, "end") == 0)
         command.clear();
     else {

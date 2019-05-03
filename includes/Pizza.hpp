@@ -43,13 +43,10 @@ namespace plz
     class Ingredients
     {
         public:
-            Ingredients() = default;
-
-            t_ingredients getIngredients() const noexcept;
-
             void updateIngredients(std::shared_ptr<t_ingredients>, t_ingredients);
             void restock(std::shared_ptr<t_ingredients>, size_t);
             bool checkIngredients(t_ingredients, t_ingredients);
+            bool checkIsEmpty(std::shared_ptr<t_ingredients>);
     };
     class Pizza
     {
@@ -70,12 +67,11 @@ namespace plz
             size_t getTime() const noexcept;
             t_pizza getPizza() const noexcept;
 
-            std::array<std::tuple<PizzaType, std::string, t_ingredients, size_t>, 4> _pizzaTypes
-            {
-                std::make_tuple(Regina, "Regina", t_ingredients {1, 1, 1, 1, 0, 0, 0, 1, 0}, 2),
-                std::make_tuple(Margarita, "Margarita", t_ingredients {1, 1, 1, 0, 0, 0, 0, 0, 0}, 1),
-                std::make_tuple(Americana, "Americana", t_ingredients {1, 1, 1, 0, 1, 0, 0, 0, 0}, 2),
-                std::make_tuple(Fantasia, "Fantasia", t_ingredients {1, 1, 0, 0, 0, 1, 1, 0, 1}, 4)
+            std::array<std::tuple<PizzaType, std::string, t_ingredients, size_t>, 5> _pizzaTypes{
+                std::make_tuple(Regina, "Regina", t_ingredients{1, 1, 1, 1, 0, 0, 0, 1, 0}, 2),
+                std::make_tuple(Margarita, "Margarita", t_ingredients{1, 1, 1, 0, 0, 0, 0, 0, 0}, 1),
+                std::make_tuple(Americana, "Americana", t_ingredients{1, 1, 1, 0, 1, 0, 0, 0, 0}, 2),
+                std::make_tuple(Fantasia, "Fantasia", t_ingredients{1, 1, 0, 0, 0, 1, 1, 0, 1}, 4)
             };
 
           private:

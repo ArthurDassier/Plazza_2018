@@ -26,7 +26,8 @@ enum PizzaType
     Regina = 1,
     Margarita = 2,
     Americana = 4,
-    Fantasia = 8
+    Fantasia = 8,
+    Nothing = 0
 };
 
 enum PizzaSize

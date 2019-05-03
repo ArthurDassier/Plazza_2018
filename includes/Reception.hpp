@@ -16,7 +16,6 @@ class Reception
 {
     public:
         Reception(int time, int nb_cook, int reset_food);
-        ~Reception();
 
         void setLastCommand(std::string new_command);
         std::string getLastCommand();
