@@ -33,7 +33,8 @@ UT 			= 	$(UT_DIR)/tests_Reception.cpp	\
 				$(UT_DIR)/tests_Kitchen.cpp		\
 				$(UT_DIR)/tests_Pizza.cpp		\
 				$(UT_DIR)/tests_Menu.cpp		\
-				$(UT_DIR)/tests_SharedMemory.cpp
+				$(UT_DIR)/tests_SharedMemory.cpp\
+				$(UT_DIR)/tests_PlazzaError.cpp
 
 UT2			=	$(SRC_DIR)/Cook.cpp				\
 				$(SRC_DIR)/Kitchen.cpp			\
