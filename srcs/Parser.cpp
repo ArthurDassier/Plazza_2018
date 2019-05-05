@@ -11,6 +11,7 @@
 #include "PlazzaError.hpp"
 
 Parser::Parser():
+    _firstOrder(true),
     _order(""),
     _type((PizzaType)0),
     _size((PizzaSize)0),
@@ -20,58 +21,29 @@ Parser::Parser():
 {
 }
 
-void Parser::parseOrder()
+void Parser::resetParser()
 {
-    std::string order;
-    std::getline(std::cin, order);
-    std::string ord;
-    size_t i = 0;
-    static bool first = true;
-
-    if (first == true)
-        first = false;
+    if (getFirstOrder() == true)
+        setFirstOrder(false);
     else
         setIsNewMenu(false);
     setOrder("");
     setLaunch(true);
-    if (order.compare("custom") == 0) {
-        custom();
+}
+
+void Parser::parseOrder()
+{
+    std::string order;
+
+    std::getline(std::cin, order);
+    if (std::cin.eof()) {
+        throw(InputError("Program ending."));
         return;
-        // throw(ParserError("custom"));
     }
-    if (order.compare("menu") == 0) {
-        _menu.showMenu();
-        setLaunch(false);
-        return;
-    }
-    // throw(ParserError("menu"));
-    for (std::string it : carveOrder(order, ';')) {
-        auto orderVector = std::make_unique<std::vector<std::string>>(carveOrder(it, ' '));
-        cleanOrder(orderVector);
-        if (orderVector->size() < 3)
-            throw(ParserError("Too few arguments."));
-        for (auto &it_c : fillArray(*orderVector)) {
-            switch (i) {
-                case 0:
-                    setPizzaType(it_c);
-                    break;
-                case 1:
-                    setPizzaSize(it_c);
-                    break;
-                case 2:
-                    setPizzaNumber(it_c);
-                    break;
-                default:
-                    break;
-            }
-            i++;
-        }
-        for (int j = 0; j < getPizzaNumber(); j++)
-            ord += std::to_string(getPizzaType()) + "\n";
-        setOrder(_order += ord);
-        ord.clear();
-        i = 0;
-    }
+    resetParser();
+    if (checkCommands(order) == false)
+        for (std::string it : carveOrder(order, ';'))
+            formatOrder(it);
 }
 
 std::vector<std::string> Parser::carveOrder(std::string str, char c)
@@ -92,15 +64,6 @@ std::vector<std::string> Parser::carveOrder(std::string str, char c)
     return order;
 }
 
-bool Parser::iequals(const std::string &a, const std::string &b)
-{
-    return std::equal(a.begin(), a.end(),
-                      b.begin(), b.end(),
-                      [](char a, char b) {
-                          return tolower(a) == tolower(b);
-                      });
-}
-
 void Parser::cleanOrder(std::unique_ptr<std::vector<std::string>> &order)
 {
     std::vector<std::string> tmp;
@@ -110,6 +73,36 @@ void Parser::cleanOrder(std::unique_ptr<std::vector<std::string>> &order)
             tmp.push_back(it);
     }
     order->swap(tmp);
+}
+
+void Parser::formatOrder(std::string order)
+{
+    auto orderVector = std::make_unique<std::vector<std::string>>(carveOrder(order, ' '));
+    std::string final_order;
+    size_t i = 0;
+
+    cleanOrder(orderVector);
+    if (orderVector->size() < 3)
+        throw(ParserError("Too few arguments."));
+    for (auto &it_c : fillArray(*orderVector)) {
+        switch (i) {
+            case 0:
+                setPizzaType(it_c);
+                break;
+            case 1:
+                setPizzaSize(it_c);
+                break;
+            case 2:
+                setPizzaNumber(it_c);
+                break;
+            default:
+                break;
+        }
+        i++;
+    }
+    for (int j = 0; j < getPizzaNumber(); j++)
+        final_order += std::to_string(getPizzaType()) + "\n";
+    setOrder(_order += final_order);
 }
 
 std::array<std::string, 3> Parser::fillArray(std::vector<std::string> order)
@@ -126,50 +119,75 @@ std::array<std::string, 3> Parser::fillArray(std::vector<std::string> order)
     return tmp;
 }
 
+bool Parser::iequals(const std::string &a, const std::string &b)
+{
+    return std::equal(a.begin(), a.end(),
+                      b.begin(), b.end(),
+                      [](char a, char b) {
+                          return tolower(a) == tolower(b);
+                      });
+}
+
+bool Parser::checkCommands(std::string order)
+{
+    if (iequals(order, "custom")) {
+        custom();
+        return true;
+    }
+    if (iequals(order, "menu")) {
+        setFirstOrder(true);
+        setLaunch(false);
+        _menu.showMenu();
+        return true;
+    }
+    return false;
+}
+
 void Parser::custom()
 {
+    auto ingredients = _menu.getIngredients();
+    auto menu = _menu.getMenu();
+    std::string name;
     std::string order;
     int time = 0;
 
-    std::array<std::pair<size_t, std::string>, 9> ingredients = {
-        std::make_pair(0, "ChiefLove"),
-        std::make_pair(0, "Doe"),
-        std::make_pair(0, "Eggplant"),
-        std::make_pair(0, "GoatCheese"),
-        std::make_pair(0, "Gruyere"),
-        std::make_pair(0, "Ham"),
-        std::make_pair(0, "Mushrooms"),
-        std::make_pair(0, "Steak"),
-        std::make_pair(0, "Tomato"),
-    };
-
+    std::cout << "\033[1;36mWelcome to the custom menu\033[0m" << std::endl;
+    std::cout << "Please enter pizza's name: ";
+    std::getline(std::cin, name);
+    auto it = std::find_if(std::begin(menu), std::end(menu),
+                           [&](std::pair<int, std::tuple<std::string, t_ingredients, size_t>> i) {
+                               return (iequals(name, std::get<0>(i.second)));
+                           });
+    if (it != std::end(menu))
+        throw(ParserError("Pizza already exists."));
     for (auto &it : ingredients) {
         std::cout << it.second << "? [y/n]: ";
         std::getline(std::cin, order);
-        it.first = (order.compare("y")) ? 0 : 1;
-    }
-    for (auto &it : ingredients)
-        if (it.first == 1) {
+        if (iequals(order, "y")) {
+            it.first = 1;
             time++;
-            std::cout << it.second << std::endl;
         }
-
-    t_ingredients finale = {
-        ingredients[0].first,
-        ingredients[1].first,
-        ingredients[2].first,
-        ingredients[3].first,
-        ingredients[4].first,
-        ingredients[5].first,
-        ingredients[6].first,
-        ingredients[7].first,
-        ingredients[8].first,
-    };
-    
-    _menu.addNewPizza("Calzone", finale, time);
-    _menu.showMenu();
+    }
+    std::string size;
+    std::cout << "Please enter pizza's size: ";
+    std::getline(std::cin, size);
+    std::cout << "Please enter number of pizza: ";
+    std::string nb;
+    std::getline(std::cin, nb);
+    _menu.setIngredients(ingredients);
+    _menu.addNewPizza(name, _menu.customIngredients(), time);
     setIsNewMenu(true);
-    setOrder("16\n");
+    formatOrder(name + " " + size + " " + nb);
+}
+
+void Parser::setFirstOrder(bool firstOrder)
+{
+    _firstOrder = firstOrder;
+}
+
+bool Parser::getFirstOrder() const noexcept
+{
+    return _firstOrder;
 }
 
 void Parser::setOrder(std::string order)
@@ -190,7 +208,6 @@ void Parser::setPizzaType(std::string type)
                                [&](std::pair<int, std::tuple<std::string, t_ingredients, size_t>> i) {
                                    return (iequals(type, std::get<0>(i.second)));
                                });
-        std::cout << it->first << std::endl;
         if (it != std::end(menu))
             _type = (PizzaType)it->first;
         else

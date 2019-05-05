@@ -9,7 +9,7 @@
 
 PlazzaError::PlazzaError(std::string const &message,
                                      std::string const &component) :
-    _message(component + ": " + message)
+    _message("\033[1;31m" + component + ": " + message + "\033[0m")
 {
 }
 

@@ -26,9 +26,6 @@ static void plazza(char **av)
                 if (parser.getIsNewMenu() == true)
                     reception.setMenu(parser.getMenu());
                 reception.setLastCommand(parser.getOrder());
-                std::cout << "last command: " << reception.getLastCommand();
-                auto tmp = reception.getMenu();
-                std::cout << "P I Z Z A   W A N T E D: " << std::get<0>(tmp->rbegin()->second) << std::endl;
                 reception.goToKitchens(reception.getLastCommand());
                 reception.setLastCommand("");
             }

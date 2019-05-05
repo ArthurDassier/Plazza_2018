@@ -66,21 +66,6 @@ typedef struct s_ingredients
     }
 } t_ingredients;
 
-// typedef std::map<int, std::tuple<std::string, t_ingredients, size_t>> map_t;
-
-// enum PizzaIngredients
-// {
-//     ChiefLove,
-//     Doe,
-//     Eggplant,
-//     GoatCheese,
-//     Gruyere,
-//     Ham,
-//     Mushrooms,
-//     Steak,
-//     Tomato
-// };
-
 struct Kitchen_inf
 {
     std::string pathname;

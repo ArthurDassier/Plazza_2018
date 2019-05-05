@@ -52,7 +52,7 @@ void *Cook::createPizza(void *cc)
 
     mutex.lock();
     sleep(_timeWait * pizza.getTime());
-    std::cout << "Cook finished " << pizza.getName() << std::endl;
+    std::cout << "\033[1;32mCook finished " << pizza.getName() << "\033[0m" << std::endl;
     mutex.unlock();
     return (ret);
 }

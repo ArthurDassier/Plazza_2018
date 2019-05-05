@@ -71,8 +71,9 @@ std::string Kitchen::takePizzas(std::string pathname, std::string command)
                 pizzas_left.back() += '\n';
             }
         } else {
-            std::cout << "Not enough ingredients to make " << pizza.getName() 
-            << " in Kitchen " << _name << std::endl;
+            if (pizza.getType() != 0)
+                std::cout << "\033[1;31mNot enough ingredients to make " << pizza.getName()
+                        << " in Kitchen " << _name << "\033[0m" << std::endl;
             pizzas_left.push_back(std::to_string(it));
             pizzas_left.back() += '\n';
         }
@@ -107,7 +108,7 @@ void Kitchen::workOnPizza(std::string pathname, int shmid)
             if (!_ing.checkIngredients(*_stock, tmp)) {
                 sec++;
                 if (sec == 5) {
-                    std::cout << "Kitchen " << _name << " closed" << std::endl;
+                    std::cout << "\033[1;34mKitchen " << _name << " closed\033[0m" << std::endl;
                     exit (0);
                 }
             } else {
@@ -138,9 +139,9 @@ void Kitchen::workOnPizza(std::string pathname, int shmid)
         } else {
             lock_clock = 1;
             if (clocke == 5) {
-                std::cout << "Kitchen " << _name << " closed" << std::endl;
+                std::cout << "\033[1;34mKitchen " << _name << " closed\033[0m" << std::endl;
                 exit (0);
-            } else if (clocke == 1)
+            } else if (clocke == 0)
                 std::cout << "Kitchen " << _name << " is waiting" << std::endl;
         }
         _SM.detachFrom(str);
@@ -177,14 +178,14 @@ int Kitchen::manageCook(int kitchen, PizzaType type, std::tuple<Cook, std::threa
         std::get<0>(it)._t1Occuped = true;
         std::get<1>(it) = std::thread(&Cook::createPizza, std::get<0>(it), test);
         lock->first = true;
-        std::cout << "Cook " << std::get<0>(it).getName() << " of Kitchen "
+        std::cout << "Cook " << std::get<0>(it).getName() + 1 << " of Kitchen "
             << kitchen << " prepare " << pizza.getName() << std::endl;
         return (0);
     } else if (std::get<0>(it).t2isOccuped() == false && pizza.getType()) {
         std::get<0>(it)._t2Occuped = true;
         std::get<2>(it) = std::thread(&Cook::createPizza, std::get<0>(it), test);
         lock->second = true;
-        std::cout << "Cook " << std::get<0>(it).getName() << " of Kitchen " 
+        std::cout << "Cook " << std::get<0>(it).getName() + 1 << " of Kitchen " 
             << kitchen << " prepare " << pizza.getName() << std::endl;
         return (0);
     }

@@ -20,15 +20,20 @@ class Parser
         Parser();
         ~Parser() = default;
 
+        void resetParser();
         void parseOrder();
-
         std::vector<std::string> carveOrder(std::string, char);
         void cleanOrder(std::unique_ptr<std::vector<std::string>> &);
+        void formatOrder(std::string);
         std::array<std::string, 3> fillArray(std::vector<std::string>);
-        
+
         bool iequals(const std::string &, const std::string &);
 
+        bool checkCommands(std::string);
         void custom();
+
+        void setFirstOrder(bool);
+        bool getFirstOrder() const noexcept;
 
         void setOrder(std::string);
         std::string getOrder() const noexcept;
@@ -60,6 +65,7 @@ class Parser
             std::make_pair(XL, "XL"),
             std::make_pair(XXL, "XXL")
         };
+        bool _firstOrder;
         std::string _order;
         PizzaType _type;
         PizzaSize _size;
