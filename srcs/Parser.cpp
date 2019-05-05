@@ -10,14 +10,41 @@
 #include "Parser.hpp"
 #include "PlazzaError.hpp"
 
+Parser::Parser():
+    _order(""),
+    _type((PizzaType)0),
+    _size((PizzaSize)0),
+    _nb(0),
+    _isNewMenu(true),
+    _launch(true)
+{
+}
+
 void Parser::parseOrder()
 {
     std::string order;
     std::getline(std::cin, order);
     std::string ord;
     size_t i = 0;
+    static bool first = true;
 
+    if (first == true)
+        first = false;
+    else
+        setIsNewMenu(false);
     setOrder("");
+    setLaunch(true);
+    if (order.compare("custom") == 0) {
+        custom();
+        return;
+        // throw(ParserError("custom"));
+    }
+    if (order.compare("menu") == 0) {
+        _menu.showMenu();
+        setLaunch(false);
+        return;
+    }
+    // throw(ParserError("menu"));
     for (std::string it : carveOrder(order, ';')) {
         auto orderVector = std::make_unique<std::vector<std::string>>(carveOrder(it, ' '));
         cleanOrder(orderVector);
@@ -99,6 +126,52 @@ std::array<std::string, 3> Parser::fillArray(std::vector<std::string> order)
     return tmp;
 }
 
+void Parser::custom()
+{
+    std::string order;
+    int time = 0;
+
+    std::array<std::pair<size_t, std::string>, 9> ingredients = {
+        std::make_pair(0, "ChiefLove"),
+        std::make_pair(0, "Doe"),
+        std::make_pair(0, "Eggplant"),
+        std::make_pair(0, "GoatCheese"),
+        std::make_pair(0, "Gruyere"),
+        std::make_pair(0, "Ham"),
+        std::make_pair(0, "Mushrooms"),
+        std::make_pair(0, "Steak"),
+        std::make_pair(0, "Tomato"),
+    };
+
+    for (auto &it : ingredients) {
+        std::cout << it.second << "? [y/n]: ";
+        std::getline(std::cin, order);
+        it.first = (order.compare("y")) ? 0 : 1;
+    }
+    for (auto &it : ingredients)
+        if (it.first == 1) {
+            time++;
+            std::cout << it.second << std::endl;
+        }
+
+    t_ingredients finale = {
+        ingredients[0].first,
+        ingredients[1].first,
+        ingredients[2].first,
+        ingredients[3].first,
+        ingredients[4].first,
+        ingredients[5].first,
+        ingredients[6].first,
+        ingredients[7].first,
+        ingredients[8].first,
+    };
+    
+    _menu.addNewPizza("Calzone", finale, time);
+    _menu.showMenu();
+    setIsNewMenu(true);
+    setOrder("16\n");
+}
+
 void Parser::setOrder(std::string order)
 {
     _order = order;
@@ -112,12 +185,14 @@ std::string Parser::getOrder() const noexcept
 void Parser::setPizzaType(std::string type)
 {
     try {
-        auto it = std::find_if(std::begin(_pizzas), std::end(_pizzas),
-                            [&](std::pair<PizzaType, std::string> i) {
-                                return (iequals(type, i.second));
-                            });
-        if (it != std::end(_pizzas))
-            _type = it->first;
+        auto menu = _menu.getMenu();
+        auto it = std::find_if(std::begin(menu), std::end(menu),
+                               [&](std::pair<int, std::tuple<std::string, t_ingredients, size_t>> i) {
+                                   return (iequals(type, std::get<0>(i.second)));
+                               });
+        std::cout << it->first << std::endl;
+        if (it != std::end(menu))
+            _type = (PizzaType)it->first;
         else
             throw(ParserError("Invalid type of pizza."));
     } catch (PlazzaError const &e) {
@@ -169,4 +244,31 @@ void Parser::setPizzaNumber(std::string nb)
 int Parser::getPizzaNumber() const noexcept
 {
     return _nb;
+}
+
+void Parser::setIsNewMenu(bool isNewMenu)
+{
+    _isNewMenu = isNewMenu;
+}
+
+bool Parser::getIsNewMenu() const noexcept
+{
+    return _isNewMenu;
+}
+
+void Parser::setLaunch(bool launch)
+{
+    _launch = launch;
+}
+
+bool Parser::getLaunch() const noexcept
+{
+    return _launch;
+}
+
+std::shared_ptr<Menu::map_t> Parser::getMenu() const noexcept
+{
+    auto menu = _menu.getMenu();
+
+    return std::make_shared<Menu::map_t>(menu);
 }

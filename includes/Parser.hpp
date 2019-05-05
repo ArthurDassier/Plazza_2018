@@ -11,12 +11,13 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include "Menu.hpp"
 #include "Plazza.hpp"
 
 class Parser
 {
     public:
-        Parser() = default;
+        Parser();
         ~Parser() = default;
 
         void parseOrder();
@@ -24,6 +25,10 @@ class Parser
         std::vector<std::string> carveOrder(std::string, char);
         void cleanOrder(std::unique_ptr<std::vector<std::string>> &);
         std::array<std::string, 3> fillArray(std::vector<std::string>);
+        
+        bool iequals(const std::string &, const std::string &);
+
+        void custom();
 
         void setOrder(std::string);
         std::string getOrder() const noexcept;
@@ -37,16 +42,16 @@ class Parser
         void setPizzaNumber(std::string);
         int getPizzaNumber() const noexcept;
 
-        bool iequals(const std::string &, const std::string &);
+        void setIsNewMenu(bool);
+        bool getIsNewMenu() const noexcept;
 
-      private:
-        std::array<std::pair<PizzaType, std::string>, 4> _pizzas
-        {
-            std::make_pair(Regina, "Regina"),
-            std::make_pair(Margarita, "Margarita"),
-            std::make_pair(Americana, "Americana"),
-            std::make_pair(Fantasia, "Fantasia")
-        };
+        void setLaunch(bool);
+        bool getLaunch() const noexcept;
+
+        std::shared_ptr<Menu::map_t> getMenu() const noexcept;
+
+    private:
+        Menu _menu;
         std::array<std::pair<PizzaSize, std::string>, 5> _sizes
         {
             std::make_pair(S, "S"),
@@ -59,5 +64,6 @@ class Parser
         PizzaType _type;
         PizzaSize _size;
         int _nb;
-        bool _error;
+        bool _isNewMenu;
+        bool _launch;
 };

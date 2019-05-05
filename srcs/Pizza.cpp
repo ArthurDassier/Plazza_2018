@@ -8,8 +8,6 @@
 #include <algorithm>
 #include "Pizza.hpp"
 
-using namespace plz;
-
 void Ingredients::updateIngredients(std::shared_ptr<t_ingredients> stock, t_ingredients pizza)
 {
     stock->chief_love -= pizza.chief_love;
@@ -61,13 +59,16 @@ bool Ingredients::checkIngredients(t_ingredients stock, t_ingredients pizza)
     return makable;
 }
 
-Pizza::Pizza(PizzaType type/*, PizzaSize size*/) : _type(type)//, _size(size)
+Pizza::Pizza(PizzaType type, std::shared_ptr<map_t> menu) : _type(type)
 {
-    auto it = std::find_if(std::begin(_pizzaTypes), std::end(_pizzaTypes),
-                           [&](std::tuple<PizzaType, std::string, t_ingredients, size_t> i) {
-                               return (type == std::get<0>(i));
+    auto it = std::find_if(menu->begin(), menu->end(),
+                           [&](std::pair<int, std::tuple<std::string, t_ingredients, size_t>> i) {
+                               return (type == i.first);
                            });
-    std::tie(_type, _name, _ing, _time) = *it;
+    if (it != menu->end()) {
+        std::tie(_name, _ing, _time) = it->second;
+        _type = (PizzaType)it->first;
+    }
 }
 
 PizzaType Pizza::getType() const noexcept

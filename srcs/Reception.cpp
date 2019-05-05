@@ -18,21 +18,6 @@ Reception::Reception(int time, int nb_cook, int reset_food):
 {
 }
 
-void Reception::setLastCommand(std::string new_command)
-{
-    _command = new_command;
-}
-
-std::string Reception::getLastCommand()
-{
-    return (_command);
-}
-
-std::list<Kitchen_inf> Reception::getKitchen()
-{
-    return (_list_kitchen);
-}
-
 void Reception::goToKitchens(std::string command)
 {
     char *str;
@@ -69,7 +54,7 @@ void Reception::createKitchen(std::string &command)
     it--;
     std::cout << "Kitchen " << it->name << " created" << std::endl;
     if ((child = fork()) == 0) {
-        Kitchen new_kitchen(it->name, _nb_cook, _reset_food, _time);
+        Kitchen new_kitchen(it->name, _nb_cook, _reset_food, _time, _menu);
         new_kitchen.workOnPizza(it->pathname, it->shmid);
     } else
         _SM.writeData(it->key, 1024, IPC_CREAT, command);
@@ -105,4 +90,29 @@ int Reception::addKitchen()
     _list_kitchen.push_back(new_kitchen);
     nb_kitchen++;
     return (pos);
+}
+
+void Reception::setLastCommand(std::string new_command)
+{
+    _command = new_command;
+}
+
+std::string Reception::getLastCommand()
+{
+    return (_command);
+}
+
+void Reception::setMenu(std::shared_ptr<Menu::map_t> menu)
+{
+    _menu = menu;
+}
+
+std::shared_ptr<Menu::map_t> Reception::getMenu() const noexcept
+{
+    return _menu;
+}
+
+std::list<Kitchen_inf> Reception::getKitchen()
+{
+    return (_list_kitchen);
 }

@@ -11,16 +11,17 @@
 #include <cmath>
 #include "Kitchen.hpp"
 
-Kitchen::Kitchen(int name, int nb_cooks, int timeRestock, int timePrepare):
+Kitchen::Kitchen(int name, int nb_cooks, int timeRestock, int timePrepare, std::shared_ptr<Menu::map_t> menu):
     _name(name),
     _timeRestock(timeRestock),
-    _timePrepare(timePrepare)
+    _timePrepare(timePrepare),
+    _menu(menu)
 {
-    _stock = std::make_shared<plz::t_ingredients>(plz::t_ingredients{5, 5, 5, 5, 5, 5, 5, 5, 5});
+    _stock = std::make_shared<t_ingredients>(t_ingredients{5, 5, 5, 5, 5, 5, 5, 5, 5});
     for (int i = 0; i < nb_cooks; ++i) {
         _cookList.emplace_back(
             std::make_tuple(
-                Cook(i, timePrepare),
+                Cook(i, timePrepare, _menu),
                 std::thread(), 
                 std::thread()
             )
@@ -60,11 +61,10 @@ std::string Kitchen::takePizzas(std::string pathname, std::string command)
         }
     }
     for (PizzaType &it : pizzas_to_do) {
-        plz::Pizza pizza = plz::Pizza(it);
+        Pizza pizza = Pizza(it, _menu);
         if (_ing.checkIngredients(*_stock, pizza.getIngredients())) {
-            if (sendToCook(pizza.getType()) == 0) {
+            if (sendToCook((PizzaType)pizza.getType()) == 0) {
                 _ing.updateIngredients(_stock, pizza.getIngredients());
-                std::cout << pizza.getName() << " in preparation" << std::endl;
                 file << pizza.getName() + " in preparation" << std::endl;
             } else {
                 pizzas_left.push_back(std::to_string(it));
@@ -93,7 +93,7 @@ void Kitchen::workOnPizza(std::string pathname, int shmid)
     int clocke = 0;
     int lock_clock = 0;
     static int sec = 0;
-    plz::t_ingredients tmp = plz::t_ingredients{1, 1, 1, 1, 1, 1, 1, 1, 1};
+    t_ingredients tmp = t_ingredients{1, 1, 1, 1, 1, 1, 1, 1, 1};
 
     _pathname = pathname;
     while (1) {
@@ -140,8 +140,8 @@ void Kitchen::workOnPizza(std::string pathname, int shmid)
             if (clocke == 5) {
                 std::cout << "Kitchen " << _name << " closed" << std::endl;
                 exit (0);
-            }
-            std::cout << "Kitchen " << _name << " is waiting" << std::endl;
+            } else if (clocke == 1)
+                std::cout << "Kitchen " << _name << " is waiting" << std::endl;
         }
         _SM.detachFrom(str);
     }
@@ -169,7 +169,7 @@ int Kitchen::manageCook(int kitchen, PizzaType type, std::tuple<Cook, std::threa
 {
     void *test = (void *)type;
     auto lock = _listLock.begin();
-    plz::Pizza pizza = plz::Pizza(type);
+    Pizza pizza = Pizza(type, _menu);
 
     for (int i = 0; posi < i; i++)
         lock++;

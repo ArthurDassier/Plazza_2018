@@ -19,12 +19,19 @@ static void plazza(char **av)
 
     while (1) {
         if (std::cin.eof())
-            break;
+            return;
         try {
             parser.parseOrder();
-            reception.setLastCommand(parser.getOrder());
-            reception.goToKitchens(reception.getLastCommand());
-            reception.setLastCommand("");
+            if (parser.getLaunch() == true) {
+                if (parser.getIsNewMenu() == true)
+                    reception.setMenu(parser.getMenu());
+                reception.setLastCommand(parser.getOrder());
+                std::cout << "last command: " << reception.getLastCommand();
+                auto tmp = reception.getMenu();
+                std::cout << "P I Z Z A   W A N T E D: " << std::get<0>(tmp->rbegin()->second) << std::endl;
+                reception.goToKitchens(reception.getLastCommand());
+                reception.setLastCommand("");
+            }
         } catch (PlazzaError const &e) {
             std::cerr << e.what() << std::endl;
         }

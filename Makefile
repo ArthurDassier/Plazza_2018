@@ -22,7 +22,8 @@ EXE			= 	$(SRC_DIR)/main.cpp				\
 				$(SRC_DIR)/Parser.cpp			\
 				$(SRC_DIR)/PlazzaError.cpp		\
 				$(SRC_DIR)/SharedMemory.cpp		\
-				$(SRC_DIR)/Pizza.cpp
+				$(SRC_DIR)/Pizza.cpp			\
+				$(SRC_DIR)/Menu.cpp
 
 OBJS		=	$(EXE:.cpp=.o)
 
