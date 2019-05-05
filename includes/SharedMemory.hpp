@@ -12,7 +12,7 @@
 
 class SharedMemory {
     public:
-        SharedMemory() = default;//(std::list<Kitchen_inf>::iterator it);
+        SharedMemory() = default;
         ~SharedMemory() = default;
 
         void writeData(key_t, size_t, size_t, std::string);
