@@ -16,11 +16,14 @@
 #include "Plazza.hpp"
 #include "Cook.hpp"
 #include "PlazzaError.hpp"
+#include "SharedMemory.hpp"
+#include "Pizza.hpp"
+#include "Menu.hpp"
 
 class Kitchen
 {
     public:
-        Kitchen(int, int, int, int);
+        Kitchen(int, int, int, int, std::shared_ptr<Menu::map_t>);
         ~Kitchen();
 
         // Members
@@ -37,17 +40,12 @@ class Kitchen
         std::string _pathname;
         std::vector<PizzaType> _PizzasToPrepare;
         std::list<std::tuple<Cook, std::thread, std::thread>> _cookList;
-        std::list<std::pair<bool, bool>> _listLock;
         std::mutex mutex;
-        int _doe;
-        int _ham;
-        int _steak;
-        int _goat_cheese;
-        int _tomato;
-        int _eggplant;
-        int _gruyere;
-        int _mushrooms;
-        int _chief_love;
+        SharedMemory _SM;
+        std::shared_ptr<t_ingredients> _stock;
+        Ingredients _ing;
+        std::list<std::pair<bool, bool>> _listLock;
         int _timeRestock;
         int _timePrepare;
+        std::shared_ptr<Menu::map_t> _menu;
 };

@@ -10,15 +10,20 @@
 #include "Plazza.hpp"
 #include "Kitchen.hpp"
 #include "PlazzaError.hpp"
+#include "SharedMemory.hpp"
+#include "Menu.hpp"
 
-class Reception 
+class Reception
 {
     public:
         Reception(int time, int nb_cook, int reset_food);
-        ~Reception();
 
         void setLastCommand(std::string new_command);
         std::string getLastCommand();
+
+        void setMenu(std::shared_ptr<Menu::map_t>);
+        std::shared_ptr<Menu::map_t> getMenu() const noexcept;
+
         std::list<Kitchen_inf> getKitchen();
         void goToKitchens(std::string);
         void createKitchen(std::string &command);
@@ -31,4 +36,6 @@ class Reception
         std::string _command;
         std::list<Kitchen_inf> _list_kitchen;
         std::list<std::string> _list_key;
+        std::shared_ptr<Menu::map_t> _menu;
+        SharedMemory _SM;
 };

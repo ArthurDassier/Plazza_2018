@@ -9,14 +9,15 @@
 
 std::mutex mutex;
 
-Cook::Cook(int name, int timeWait)
+Cook::Cook(int name, int timeWait, std::shared_ptr<Menu::map_t> menu):
+    _t1Occuped(false),
+    _t2Occuped(false),
+    _allOcupped(false),
+    _name(name),
+    _nbCurrPizza(0),
+    _timeWait(timeWait),
+    _menu(menu)
 {
-    _name = name;
-    _timeWait = timeWait;
-    _allOcupped = false;
-    _t1Occuped = false;
-    _t2Occuped = false;
-    _nbCurrPizza = 0;
 }
 
 Cook::~Cook()
@@ -47,21 +48,11 @@ void *Cook::createPizza(void *cc)
 {
     PizzaType info = *(reinterpret_cast<PizzaType *>(&cc));
     void *ret;
+    Pizza pizza = Pizza(info, _menu);
 
     mutex.lock();
-    switch (info) {
-        case 1: sleep(_timeWait * 2);
-            break;
-        case 2: sleep(_timeWait * 1);
-            break;
-        case 4: sleep(_timeWait * 2);
-            break;
-        case 8: sleep(_timeWait * 4);
-            break;
-        default: return (ret);
-            break;
-    }
-    std::cout << "Cook finished pizza" << std::endl;
+    sleep(_timeWait * pizza.getTime());
+    std::cout << "\033[1;32mCook finished " << pizza.getName() << "\033[0m" << std::endl;
     mutex.unlock();
     return (ret);
 }

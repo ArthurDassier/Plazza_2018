@@ -11,24 +11,17 @@
 #include <cmath>
 #include "Kitchen.hpp"
 
-Kitchen::Kitchen(int name, int nb_cooks, int timeRestock, int timePrepare):
+Kitchen::Kitchen(int name, int nb_cooks, int timeRestock, int timePrepare, std::shared_ptr<Menu::map_t> menu):
     _name(name),
-    _doe(5),
-    _ham(5),
-    _steak(5),
-    _goat_cheese(5),
-    _tomato(5),
-    _eggplant(5),
-    _gruyere(5),
-    _mushrooms(5),
-    _chief_love(5),
     _timeRestock(timeRestock),
-    _timePrepare(timePrepare)
+    _timePrepare(timePrepare),
+    _menu(menu)
 {
+    _stock = std::make_shared<t_ingredients>(t_ingredients{5, 5, 5, 5, 5, 5, 5, 5, 5});
     for (int i = 0; i < nb_cooks; ++i) {
         _cookList.emplace_back(
             std::make_tuple(
-                Cook(i, timePrepare),
+                Cook(i, timePrepare, _menu),
                 std::thread(), 
                 std::thread()
             )
@@ -68,56 +61,19 @@ std::string Kitchen::takePizzas(std::string pathname, std::string command)
         }
     }
     for (PizzaType &it : pizzas_to_do) {
-        if (it == Regina && _doe > 0 && _tomato > 0 && _gruyere > 0 && _ham > 0 && _mushrooms > 0) {
-            if (sendToCook(it) == 0) {
-                _doe -= 1;
-                _tomato -= 1;
-                _gruyere -= 1;
-                _ham -= 1;
-                _mushrooms -= 1;
-                std::cout << "Regina in preparation" << std::endl;
-                file << "Regina in preparation" << std::endl;
-            } else {
-                pizzas_left.push_back(std::to_string(it));
-                pizzas_left.back() += '\n';
-            }
-        } else if (it == Margarita && _doe > 0 && _tomato > 0 && _gruyere > 0) {
-            if (sendToCook(it) == 0) {
-                _doe -= 1;
-                _tomato -= 1;
-                _gruyere -= 1;
-                std::cout << "Margarita in preparation" << std::endl;
-                file << "Margarita in preparation" << std::endl;
-            } else {
-                pizzas_left.push_back(std::to_string(it));
-                pizzas_left.back() += '\n';
-            }
-        } else if (it == Americana && _doe > 0 && _tomato > 0 && _gruyere > 0 && _steak > 0) {
-            if (sendToCook(it) == 0) {
-                _doe -= 1;
-                _tomato -= 1;
-                _gruyere -= 1;
-                _steak -= 1;
-                std::cout << "Americana in preparation" << std::endl;
-                file << "Americana in preparation" << std::endl;
-            } else {
-                pizzas_left.push_back(std::to_string(it));
-                pizzas_left.back() += '\n';
-            }
-        } else if (it == Fantasia && _doe > 0 && _tomato > 0 && _eggplant > 0 && _goat_cheese > 0 && _chief_love > 0) {
-            if (sendToCook(it) == 0) {
-                _doe -= 1;
-                _tomato -= 1;
-                _eggplant -= 1;
-                _goat_cheese -= 1;
-                _chief_love -= 1;
-                std::cout << "Fantasia in preparation" << std::endl;
-                file << "Fantasia in preparation" << std::endl;
+        Pizza pizza = Pizza(it, _menu);
+        if (_ing.checkIngredients(*_stock, pizza.getIngredients())) {
+            if (sendToCook((PizzaType)pizza.getType()) == 0) {
+                _ing.updateIngredients(_stock, pizza.getIngredients());
+                file << pizza.getName() + " in preparation" << std::endl;
             } else {
                 pizzas_left.push_back(std::to_string(it));
                 pizzas_left.back() += '\n';
             }
         } else {
+            if (pizza.getType() != 0)
+                std::cout << "\033[1;31mNot enough ingredients to make " << pizza.getName()
+                        << " in Kitchen " << _name << "\033[0m" << std::endl;
             pizzas_left.push_back(std::to_string(it));
             pizzas_left.back() += '\n';
         }
@@ -137,7 +93,8 @@ void Kitchen::workOnPizza(std::string pathname, int shmid)
     std::fstream file(pathname, std::fstream::out | std::fstream::in);
     int clocke = 0;
     int lock_clock = 0;
-    static int ntm = 0;
+    static int sec = 0;
+    t_ingredients tmp = t_ingredients{1, 1, 1, 1, 1, 1, 1, 1, 1};
 
     _pathname = pathname;
     while (1) {
@@ -145,22 +102,17 @@ void Kitchen::workOnPizza(std::string pathname, int shmid)
         if (lock_clock == 1)
             clocke++;
         if (clocke == (_timeRestock / 1000))
-            restock();
-        str = (char*) shmat(shmid, (void*)0, 0);
-        if (str == (void *)-1)
-            throw(SharedMemoryError("shmat error."));
+            _ing.restock(_stock, 5);
+        str = _SM.getDataById(shmid);
         if (strcmp(str, "end") != 0) {
-            if (_doe == 0 || _ham == 0 || _steak == 0 || _goat_cheese == 0 ||
-                _tomato == 0 || _eggplant == 0 || _gruyere == 0 || _mushrooms == 0 ||
-                _chief_love == 0) {
-                ntm++;
-                if (ntm == 5) {
-                    std::cout << "Kitchen " << _name << " closed" << std::endl;
+            if (!_ing.checkIngredients(*_stock, tmp)) {
+                sec++;
+                if (sec == 5) {
+                    std::cout << "\033[1;34mKitchen " << _name << " closed\033[0m" << std::endl;
                     exit (0);
                 }
-            }
-            else {
-                ntm = 0;
+            } else {
+                sec = 0;
                 lock_clock = 0;
                 clocke = 0;
                 std::string tmp(str);
@@ -187,15 +139,15 @@ void Kitchen::workOnPizza(std::string pathname, int shmid)
         } else {
             lock_clock = 1;
             if (clocke == 5) {
-                std::cout << "Kitchen " << _name << " closed" << std::endl;
+                std::cout << "\033[1;34mKitchen " << _name << " closed\033[0m" << std::endl;
                 exit (0);
-            }
-            std::cout << "Kitchen " << _name << " is waiting" << std::endl;
+            } else if (clocke == 0)
+                std::cout << "Kitchen " << _name << " is waiting" << std::endl;
         }
-        shmdt(str);
+        _SM.detachFrom(str);
     }
     file.close();
-    shmctl(shmid, IPC_RMID, NULL);
+    _SM.destroy(shmid, IPC_RMID);
 }
 
 int Kitchen::sendToCook(PizzaType pizza)
@@ -214,45 +166,27 @@ int Kitchen::sendToCook(PizzaType pizza)
     return (84);
 }
 
-int Kitchen::manageCook(int kitchen, PizzaType pizza, std::tuple<Cook, std::thread, std::thread> &it, int posi)
+int Kitchen::manageCook(int kitchen, PizzaType type, std::tuple<Cook, std::thread, std::thread> &it, int posi)
 {
-    // void *test = *(reinterpret_cast<void **>(&pizza));
-    void *test = (void *)pizza;
-    auto ttt = _listLock.begin();
+    void *test = (void *)type;
+    auto lock = _listLock.begin();
+    Pizza pizza = Pizza(type, _menu);
 
     for (int i = 0; posi < i; i++)
-        ttt++;
-    if (std::get<0>(it).t1isOccuped() == false) {
+        lock++;
+    if (std::get<0>(it).t1isOccuped() == false && pizza.getType()) {
         std::get<0>(it)._t1Occuped = true;
         std::get<1>(it) = std::thread(&Cook::createPizza, std::get<0>(it), test);
-        ttt->first = true;
-        std::cout << "Cook" << std::get<0>(it).getName() << " of Kitchen" << kitchen << " prepare ";
-        switch (pizza) {
-            case 1: std::cout << "Regina" << std::endl;
-                break;
-            case 2: std::cout << "Margarita" << std::endl;
-                break;
-            case 4: std::cout << "Americana" << std::endl;
-                break;
-            case 8: std::cout << "Fantasia" << std::endl;
-                break;
-        }
+        lock->first = true;
+        std::cout << "Cook " << std::get<0>(it).getName() + 1 << " of Kitchen "
+            << kitchen << " prepare " << pizza.getName() << std::endl;
         return (0);
-    } else if (std::get<0>(it).t2isOccuped() == false) {
+    } else if (std::get<0>(it).t2isOccuped() == false && pizza.getType()) {
         std::get<0>(it)._t2Occuped = true;
         std::get<2>(it) = std::thread(&Cook::createPizza, std::get<0>(it), test);
-        ttt->second = true;
-        std::cout << "Cook" << std::get<0>(it).getName() << " of Kitchen" << kitchen << " prepare ";
-        switch (pizza) {
-            case 1: std::cout << "Regina" << std::endl;
-                break;
-            case 2: std::cout << "Margarita" << std::endl;
-                break;
-            case 4: std::cout << "Americana" << std::endl;
-                break;
-            case 8: std::cout << "Fantasia" << std::endl;
-                break;
-        }
+        lock->second = true;
+        std::cout << "Cook " << std::get<0>(it).getName() + 1 << " of Kitchen " 
+            << kitchen << " prepare " << pizza.getName() << std::endl;
         return (0);
     }
     if (std::get<0>(it).t1isOccuped() == true && std::get<0>(it).t2isOccuped() == true) {
@@ -260,17 +194,4 @@ int Kitchen::manageCook(int kitchen, PizzaType pizza, std::tuple<Cook, std::thre
         return (1);
     } else
         return (0);
-}
-
-void Kitchen::restock()
-{
-    ++_doe;
-    ++_ham;
-    ++_steak;
-    ++_goat_cheese;
-    ++_tomato;
-    ++_eggplant;
-    ++_gruyere;
-    ++_mushrooms;
-    ++_chief_love;
 }

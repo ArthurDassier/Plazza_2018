@@ -8,8 +8,10 @@
 #pragma once
 
 #include <thread>
+#include "Pizza.hpp"
 #include "Plazza.hpp"
 #include "PlazzaError.hpp"
+#include "Menu.hpp"
 
 typedef struct
 {
@@ -22,7 +24,7 @@ typedef struct
 class Cook 
 {
     public:
-        Cook(int, int);
+        Cook(int, int, std::shared_ptr<Menu::map_t>);
         ~Cook();
 
         int getName() const;
@@ -39,4 +41,5 @@ class Cook
         int _name;
         int _nbCurrPizza;
         int _timeWait;
+        std::shared_ptr<Menu::map_t> _menu;
 };

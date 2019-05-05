@@ -18,11 +18,17 @@ static void plazza(char **av)
     Parser parser;
 
     while (1) {
+        if (std::cin.eof())
+            return;
         try {
             parser.parseOrder();
-            reception.setLastCommand(parser.getOrder());
-            reception.goToKitchens(reception.getLastCommand());
-            reception.setLastCommand("");
+            if (parser.getLaunch() == true) {
+                if (parser.getIsNewMenu() == true)
+                    reception.setMenu(parser.getMenu());
+                reception.setLastCommand(parser.getOrder());
+                reception.goToKitchens(reception.getLastCommand());
+                reception.setLastCommand("");
+            }
         } catch (PlazzaError const &e) {
             std::cerr << e.what() << std::endl;
         }
