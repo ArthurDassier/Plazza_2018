@@ -31,14 +31,17 @@ UT 			= 	$(UT_DIR)/tests_Reception.cpp	\
 				$(UT_DIR)/tests_Parser.cpp		\
 				$(UT_DIR)/tests_Cook.cpp		\
 				$(UT_DIR)/tests_Kitchen.cpp		\
+				$(UT_DIR)/tests_Pizza.cpp		\
+				$(UT_DIR)/tests_Menu.cpp
 
 UT2			=	$(SRC_DIR)/Cook.cpp				\
 				$(SRC_DIR)/Kitchen.cpp			\
 				$(SRC_DIR)/Reception.cpp		\
 				$(SRC_DIR)/Parser.cpp			\
-				$(SRC_DIR)/Pizza.cpp			\
 				$(SRC_DIR)/PlazzaError.cpp		\
-				$(SRC_DIR)/SharedMemory.cpp
+				$(SRC_DIR)/SharedMemory.cpp		\
+				$(SRC_DIR)/Pizza.cpp			\
+				$(SRC_DIR)/Menu.cpp
 
 OBJS_UT		=	$(UT:.cpp=.o)
 
