@@ -81,11 +81,6 @@ std::string Pizza::getName() const noexcept
     return _name;
 }
 
-PizzaSize Pizza::getSize() const noexcept
-{
-    return _size;
-}
-
 t_ingredients Pizza::getIngredients() const noexcept
 {
     return _ing;
