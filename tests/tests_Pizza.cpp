@@ -127,8 +127,14 @@ Test(tests_Pizza, checkIngredients_1)
     auto stock = std::make_shared<t_ingredients>(t_ingredients{5, 5, 5, 5, 5, 5, 5, 5, 5});
     Ingredients ing;
     Pizza pizza(Regina, menu);
+    Pizza pizza2(Margarita, menu);
+    Pizza pizza3(Americana, menu);
+    Pizza pizza4(Fantasia, menu);
 
     cr_assert_eq(ing.checkIngredients(*stock, pizza.getIngredients()), true);
+    cr_assert_eq(ing.checkIngredients(*stock, pizza2.getIngredients()), true);
+    cr_assert_eq(ing.checkIngredients(*stock, pizza3.getIngredients()), true);
+    cr_assert_eq(ing.checkIngredients(*stock, pizza4.getIngredients()), true);
 }
 
 Test(tests_Pizza, checkIngredients_2)

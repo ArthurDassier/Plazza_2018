@@ -29,7 +29,6 @@ class Pizza : public Menu
 
         PizzaType getType() const noexcept;
         std::string getName() const noexcept;
-        PizzaSize getSize() const noexcept;
         t_ingredients getIngredients() const noexcept;
         size_t getTime() const noexcept;
 
@@ -37,7 +36,6 @@ class Pizza : public Menu
         Menu _menu;
         PizzaType _type;
         std::string _name;
-        PizzaSize _size;
         t_ingredients _ing;
         size_t _time;
 };
